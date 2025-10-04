@@ -1,0 +1,36 @@
+{
+  "compilerOptions": {
+    "target": "es2022",
+    "module": "NodeNext",
+    "moduleResolution": "nodenext",
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "allowJs": false,
+    "checkJs": false,
+    "strict": true,
+    "noImplicitAny": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "outDir": "dist",
+    "baseUrl": ".",
+    "paths": {
+      "@opePortalBasePage": ["src/pom/operatorPortal/base.page.ts"],
+      "@opePortalPage/*":   ["src/pom/operatorPortal/pages/*"],
+      "@opePortalCom/*":    ["src/pom/operatorPortal/components/*"],
+      "@opePortalRoutes":   ["src/pom/operatorPortal/routes"],
+      "@opePortalPages":    ["src/pom/operatorPortal/pages/index"],
+      "@headerComponent":   ["src/pom/operatorPortal/components/header.component"],
+      "@routes":            ["src/pom/operatorPortal/routes"],
+      "@fixtures":          ["src/setup/fixtures"],
+      "@data/*":            ["src/data/*"],
+      "@globalSetup":       ["src/setup/globalSetup"],
+      "@utils":             ["src/utils"],
+      "@testData/*":        ["src/testData"],
+    }
+  },
+  "include": [
+    "src",
+    "tests",
+    "playwright.config.ts"
+  ]
+}
