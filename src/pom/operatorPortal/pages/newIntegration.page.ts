@@ -1,40 +1,70 @@
 import { Locator, Page } from '@playwright/test';
 
 export class NewIntegrationPage {
-  readonly page: Page;
-  readonly integrationNameInput: Locator;
-  readonly urlInput: Locator;
-  readonly authorisationTokenInput: Locator;
-  readonly areaCodeInput: Locator;
-  readonly companyCodeInput: Locator;
-  readonly apiVersionInput: Locator;
-  readonly appCodeInput: Locator;
-  readonly tassInput: Locator;
-  readonly smartcardFieldInput: Locator;
-  readonly studentStatusesInput: Locator;
-  readonly lastRunAtInput: Locator;
-  readonly typeDropdown: Locator;
-  readonly closeButton: Locator;
-  readonly verifyButton: Locator;
-  readonly saveButton: Locator;
+  private readonly page: Page;
 
   constructor(page: Page) {
     this.page = page;
-    this.integrationNameInput = page.locator('//label[text()="Integration Name"]/following-sibling::input');
-    this.urlInput = page.locator('//label[text()="URL"]/following-sibling::input');
-    this.authorisationTokenInput = page.locator('//label[text()="Authorisation Token"]/following-sibling::input');
-    this.areaCodeInput = page.locator('//label[text()="Area Code"]/following-sibling::input');
-    this.companyCodeInput = page.locator('//label[text()="Company Code"]/following-sibling::input');
-    this.apiVersionInput = page.locator('//label[text()="API Version"]/following-sibling::input');
-    this.appCodeInput = page.locator('//label[text()="App Code"]/following-sibling::input');
-    this.tassInput = page.locator('//label[text()="TASS"]/following-sibling::input');
-    this.smartcardFieldInput = page.locator('//label[text()="Smartcard Field"]/following-sibling::input');
-    this.studentStatusesInput = page.locator('//label[text()="Student Statuses"]/following-sibling::input');
-    this.lastRunAtInput = page.locator('//label[text()="Last Run at"]/following-sibling::input');
-    this.typeDropdown = page.locator('//label[text()="Type"]/following-sibling::input');
-    this.closeButton = page.locator('button:has-text("Close")');
-    this.verifyButton = page.locator('button:has-text("Verify")');
-    this.saveButton = page.locator('button:has-text("Save")');
+  }
+
+  private get integrationNameInput(): Locator {
+    return this.page.locator('//label[text()="Integration Name"]/following-sibling::input');
+  }
+
+  private get urlInput(): Locator {
+    return this.page.locator('//label[text()="URL"]/following-sibling::input');
+  }
+
+  private get authorisationTokenInput(): Locator {
+    return this.page.locator('//label[text()="Authorisation Token"]/following-sibling::input');
+  }
+
+  private get areaCodeInput(): Locator {
+    return this.page.locator('//label[text()="Area Code"]/following-sibling::input');
+  }
+
+  private get companyCodeInput(): Locator {
+    return this.page.locator('//label[text()="Company Code"]/following-sibling::input');
+  }
+
+  private get apiVersionInput(): Locator {
+    return this.page.locator('//label[text()="API Version"]/following-sibling::input');
+  }
+
+  private get appCodeInput(): Locator {
+    return this.page.locator('//label[text()="App Code"]/following-sibling::input');
+  }
+
+  private get tassInput(): Locator {
+    return this.page.locator('//label[text()="TASS"]/following-sibling::input');
+  }
+
+  private get smartcardFieldInput(): Locator {
+    return this.page.locator('//label[text()="Smartcard Field"]/following-sibling::input');
+  }
+
+  private get studentStatusesInput(): Locator {
+    return this.page.locator('//label[text()="Student Statuses"]/following-sibling::input');
+  }
+
+  private get lastRunAtInput(): Locator {
+    return this.page.locator('//label[text()="Last Run at"]/following-sibling::input');
+  }
+
+  private get typeDropdown(): Locator {
+    return this.page.locator('//label[text()="Type"]/following-sibling::input');
+  }
+
+  private get closeButton(): Locator {
+    return this.page.locator('button:has-text("Close")');
+  }
+
+  private get verifyButton(): Locator {
+    return this.page.locator('button:has-text("Verify")');
+  }
+
+  private get saveButton(): Locator {
+    return this.page.locator('button:has-text("Save")');
   }
 
   async fillIntegrationDetails(integrationName: string, url: string, authToken: string, type: string) {
