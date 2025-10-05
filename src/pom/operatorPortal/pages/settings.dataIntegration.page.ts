@@ -1,5 +1,5 @@
-import { Page, expect, Locator } from '@playwright/test';
-import { BasePage } from '@opePortalBasePage';
+import { expect, Locator, Page } from '@playwright/test';
+import { BasePage } from '@operatorPortalPages';
 
 export class DataIntegrationPage extends BasePage {
   constructor(page: Page) {
@@ -8,7 +8,7 @@ export class DataIntegrationPage extends BasePage {
 
   //#region ====== LOCATORS ===================
   private get addNewDataIntegrationsButton(): Locator {
-    return this.page.locator('button:has-text("ADD NEW DATA INTEGRATIONS")');
+    return this.page.locator('button:has-text("Add New Data Integrations")');
   }
 
   private get searchInput(): Locator {
@@ -16,7 +16,7 @@ export class DataIntegrationPage extends BasePage {
   }
 
   private get dataTable(): Locator {
-    return this.page.locator('table, .table');
+    return this.page.locator('table, .data-table');
   }
 
   private get noDataMessage(): Locator {
@@ -24,7 +24,7 @@ export class DataIntegrationPage extends BasePage {
   }
 
   private get pageTitle(): Locator {
-    return this.page.locator('h1, h2, h3, .page-title').filter({ hasText: 'DATA INTEGRATIONS' });
+    return this.page.locator('text="DATA INTEGRATIONS"');
   }
 
   // Success/Error message locators
@@ -47,6 +47,7 @@ export class DataIntegrationPage extends BasePage {
   async clickAddNewDataIntegrations(): Promise<NewDataIntegrationPage> {
     await this.addNewDataIntegrationsButton.click();
     const newIntegrationPage = new NewDataIntegrationPage(this.page);
+    await newIntegrationPage.expectLoaded();
     return newIntegrationPage;
   }
 
@@ -69,7 +70,7 @@ export class DataIntegrationPage extends BasePage {
     await expect(this.successAlert).toBeVisible();
   }
 
-  async verifyNoDataAvailable(): Promise<void> {
+  async verifyNoDataMessage(): Promise<void> {
     await expect(this.noDataMessage).toBeVisible();
   }
   //#endregion ================================
@@ -81,66 +82,95 @@ export class NewDataIntegrationPage extends BasePage {
   }
 
   //#region ====== LOCATORS ===================
+  // Based on the actual form fields visible in the modal
   private get integrationNameInput(): Locator {
-    return this.page.locator('input[placeholder="Integration Name"]');
+    // The first input field after "Integration Name" label
+    return this.page.locator('label:has-text("Integration Name") + input, input').first();
   }
 
   private get urlInput(): Locator {
-    return this.page.locator('input[placeholder="URL"]');
+    // Input field with URL label/placeholder
+    return this.page.locator('input').nth(2); // 3rd input field based on screenshot
   }
 
   private get authorisationTokenInput(): Locator {
-    return this.page.locator('input[placeholder="Authorisation Token"]');
+    // Input field for Authorisation Token
+    return this.page.locator('input').nth(3); // 4th input field
   }
 
   private get areaCodeInput(): Locator {
-    return this.page.locator('input[placeholder="Area Code"]');
+    // Area Code input field
+    return this.page.locator('input').nth(5); // 6th input field
   }
 
   private get companyCodeInput(): Locator {
-    return this.page.locator('input[placeholder="Company Code"]');
+    // Company Code input field
+    return this.page.locator('input').nth(6); // 7th input field
   }
 
   private get apiVersionInput(): Locator {
-    return this.page.locator('input[placeholder="API Version"]');
+    // API Version input field
+    return this.page.locator('input').nth(7); // 8th input field
   }
 
   private get appCodeInput(): Locator {
-    return this.page.locator('input[placeholder="App Code"]');
+    // App Code input field
+    return this.page.locator('input').nth(8); // 9th input field
   }
 
   private get typeInput(): Locator {
-    return this.page.locator('input[placeholder="Type"]');
+    // Type input field (appears to be TASS by default)
+    return this.page.locator('input').nth(10); // Type field
+  }
+
+  private get smartcardFieldInput(): Locator {
+    // Smartcard Field input
+    return this.page.locator('input').nth(11);
+  }
+
+  private get studentStatusesInput(): Locator {
+    // Student Statuses input
+    return this.page.locator('input').nth(12);
+  }
+
+  private get lastRunAtInput(): Locator {
+    // Last Run at input
+    return this.page.locator('input').nth(13);
   }
 
   private get saveButton(): Locator {
-    return this.page.locator('button:has-text("SAVE")');
+    return this.page.locator('button:has-text("Save")');
   }
 
   private get verifyButton(): Locator {
-    return this.page.locator('button:has-text("VERIFY")');
+    return this.page.locator('button:has-text("Verify")');
   }
 
   private get closeButton(): Locator {
-    return this.page.locator('button:has-text("CLOSE")');
+    return this.page.locator('button:has-text("Close")');
   }
 
   private get formModal(): Locator {
-    return this.page.locator('.modal, .dialog').first();
+    return this.page.locator('.modal, .dialog, [role="dialog"]').first();
   }
   //#endregion ================================
 
   //#region ====== GUARDS =====================
   protected async loadCondition(): Promise<void> {
-    await Promise.all([
-      expect(this.formModal.or(this.integrationNameInput)).toBeVisible(),
-      expect(this.saveButton).toBeVisible(),
-    ]);
+    await expect(this.integrationNameInput).toBeVisible();
+    await expect(this.saveButton).toBeVisible();
   }
   //#endregion ================================
 
   //#region ====== ACTIONS ====================
-  async fillIntegrationDetails(integrationName: string, url: string, authorisationToken: string, areaCode?: string, companyCode?: string, apiVersion?: string): Promise<void> {
+  async fillIntegrationDetails(
+    integrationName: string, 
+    url: string, 
+    authorisationToken: string, 
+    areaCode?: string, 
+    companyCode?: string, 
+    apiVersion?: string
+  ): Promise<void> {
     await this.integrationNameInput.fill(integrationName);
     await this.urlInput.fill(url);
     await this.authorisationTokenInput.fill(authorisationToken);
@@ -162,6 +192,10 @@ export class NewDataIntegrationPage extends BasePage {
     await this.saveButton.click();
   }
 
+  async verifyIntegration(): Promise<void> {
+    await this.verifyButton.click();
+  }
+
   async cancelIntegration(): Promise<void> {
     await this.closeButton.click();
   }
@@ -171,6 +205,7 @@ export class NewDataIntegrationPage extends BasePage {
   async verifyFormDisplayed(): Promise<void> {
     await expect(this.integrationNameInput).toBeVisible();
     await expect(this.saveButton).toBeVisible();
+    await expect(this.closeButton).toBeVisible();
   }
 
   async verifyFormClosed(): Promise<void> {
