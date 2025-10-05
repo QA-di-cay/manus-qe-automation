@@ -7,7 +7,7 @@ test-results/
 *.log
 
 # Environment files
-.env
+
 
 # Browserstack
 log
