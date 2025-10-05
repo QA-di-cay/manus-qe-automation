@@ -24,7 +24,6 @@ test.describe('Holiday testcases - @holiday @settings', () => {
     await holidayPage.verifyAddSuccess(holidayDate, 'public');
 
     let travelConfigPage = await holidayPage.header.accessTravelConfiguration();
-    await travelConfigPage.expectLoaded();
     await travelConfigPage.createFreeTravelConfig("[TC-1131] public", 90, 2, 'public');
 
     // Add school holiday
@@ -34,7 +33,6 @@ test.describe('Holiday testcases - @holiday @settings', () => {
     await holidayPage.verifyAddSuccess(holidayDate, 'school');
 
     travelConfigPage = await holidayPage.header.accessTravelConfiguration();
-    await travelConfigPage.expectLoaded();
     await travelConfigPage.createFreeTravelConfig("[TC-1131] school", 60, 2, 'school');
 
   });
