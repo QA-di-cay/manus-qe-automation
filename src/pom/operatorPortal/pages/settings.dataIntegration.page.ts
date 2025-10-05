@@ -1,5 +1,5 @@
 import { expect, Locator, Page } from '@playwright/test';
-import { BasePage } from '@opePortalBasePage';
+import { BasePage } from '@operatorPortalPages';
 
 export class DataIntegrationPage extends BasePage {
   constructor(page: Page) {
@@ -48,7 +48,7 @@ export class DataIntegrationPage extends BasePage {
   async clickAddNewDataIntegrations(): Promise<NewDataIntegrationPage> {
     await this.addNewDataIntegrationsButton.click();
     const newIntegrationPage = new NewDataIntegrationPage(this.page);
-    await newIntegrationPage.expectLoaded();
+    await newIntegrationPage.waitForModalToLoad();
     return newIntegrationPage;
   }
 
@@ -77,10 +77,8 @@ export class DataIntegrationPage extends BasePage {
   //#endregion ================================
 }
 
-export class NewDataIntegrationPage extends BasePage {
-  constructor(page: Page) {
-    super(page, 'newIntegrationPage');
-  }
+export class NewDataIntegrationPage {
+  constructor(private page: Page) {}
 
   //#region ====== LOCATORS ===================
   // Based on the actual form fields visible in the modal
@@ -157,7 +155,7 @@ export class NewDataIntegrationPage extends BasePage {
   //#endregion ================================
 
   //#region ====== GUARDS =====================
-  protected async loadCondition(): Promise<void> {
+  async waitForModalToLoad(): Promise<void> {
     await expect(this.integrationNameInput).toBeVisible();
     await expect(this.saveButton).toBeVisible();
   }
