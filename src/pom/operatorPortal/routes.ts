@@ -18,7 +18,10 @@ export const Routes = {
   driverApp:          { path: '/transportme/config/setting_driver_app', title: 'Driver App' },
   dataIntegration:    { path: '/transportme/config/integrations', title: 'Data Integrations' },
   pushToTalkPage:     { path: '/transportme/config/push_to_talk', title: 'Push To Talk' },
-
+  newIntegrationPage: { path: '/transportme/config/integrations/new', title: 'New Integration' },
+  offlineDataPage:    { path: '/transportme/config/offline_data', title: 'Offline Data' },
+  passengerAppPage:   { path: '/transportme/config/passenger_app', title: 'Passenger App' },
+  publicTrackingPage: { path: '/transportme/config/public_tracking', title: 'Public Tracking' },
 
   // Smart Card
   travelConfigPage:   { path: '/transportme/smart_cards/smartcard_config', title: 'Travel Configuration' },
