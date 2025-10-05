@@ -1,39 +1,71 @@
-import { Page, expect, Locator } from "@playwright/test";
+import { Page, expect, Locator } from '@playwright/test';
+import { BasePage } from '@opePortalBasePage';
 
-export class PushToTalkPage {
-    readonly headerPushToTalk: Locator;
-    readonly adminUsernameTextBox: Locator;
-    readonly adminPasswordTextBox: Locator;
-    readonly adminUsernameTextTip: Locator;
-    readonly adminPasswordTextTip: Locator;
+export class PushToTalkPage extends BasePage {
+  constructor(page: Page) {
+    super(page, 'pushToTalkPage');
+  }
 
-    constructor(private readonly page: Page) {
-        this.headerPushToTalk = page.locator('span:has-text("Push to talk")');
-        this.adminUsernameTextBox = page.locator('label:has-text("Admin Username") + input');
-        this.adminPasswordTextBox = page.locator('label:has-text("Admin Password") + input');
-        this.adminUsernameTextTip = page.locator('label[class="v-label theme--light"]:has-text("Admin Username")');
-        this.adminPasswordTextTip = page.locator('label[class="v-label theme--light"]:has-text("Admin Password")');
-    }
+  //#region ====== LOCATORS ===================
+  private get headerPushToTalk(): Locator {
+    return this.page.locator('span:has-text("Push to talk")');
+  }
 
-    async expectLoaded() {
-        await Promise.all([
-            expect(this.headerPushToTalk).toBeVisible(),
-        ]);
-    }
+  private get adminUsernameTextBox(): Locator {
+    return this.page.locator('label:has-text("Admin Username") + input');
+  }
 
-    async checkElementVisible(element: Locator) {
-        await expect(element).toBeVisible();
-    }
+  private get adminPasswordTextBox(): Locator {
+    return this.page.locator('label:has-text("Admin Password") + input');
+  }
 
-    async checkElementNotVisible(element: Locator) {
-        await expect(element).not.toBeVisible();
-    }
+  private get adminUsernameTextTip(): Locator {
+    return this.page.locator('label[class="v-label theme--light"]:has-text("Admin Username")');
+  }
 
-    async addText(element: Locator, text: string) {
-        await element.fill(text);
-    }
+  private get adminPasswordTextTip(): Locator {
+    return this.page.locator('label[class="v-label theme--light"]:has-text("Admin Password")');
+  }
+  //#endregion ================================
 
-    async clearText(element: Locator) {
-        await element.clear();
-    }
+  //#region ====== GUARDS =====================
+  protected async loadCondition(): Promise<void> {
+    await Promise.all([
+      expect(this.headerPushToTalk).toBeVisible(),
+      expect(this.adminUsernameTextBox).toBeVisible(),
+      expect(this.adminPasswordTextBox).toBeVisible(),
+    ]);
+  }
+  //#endregion ================================
+
+  //#region ====== ACTIONS ====================
+  async fillAdminCredentials(username: string, password: string): Promise<void> {
+    await this.adminUsernameTextBox.fill(username);
+    await this.adminPasswordTextBox.fill(password);
+  }
+
+  async clearAdminCredentials(): Promise<void> {
+    await this.adminUsernameTextBox.clear();
+    await this.adminPasswordTextBox.clear();
+  }
+
+  async clickHeader(): Promise<void> {
+    await this.headerPushToTalk.click();
+  }
+
+  async verifyCredentialFieldsVisible(): Promise<void> {
+    await expect(this.adminUsernameTextBox).toBeVisible();
+    await expect(this.adminPasswordTextBox).toBeVisible();
+  }
+
+  async verifyTextTipsNotVisible(): Promise<void> {
+    await expect(this.adminUsernameTextTip).not.toBeVisible();
+    await expect(this.adminPasswordTextTip).not.toBeVisible();
+  }
+
+  async verifyTextTipsVisible(): Promise<void> {
+    await expect(this.adminUsernameTextTip).toBeVisible();
+    await expect(this.adminPasswordTextTip).toBeVisible();
+  }
+  //#endregion ================================
 }
