@@ -12,7 +12,8 @@ export class DataIntegrationPage extends BasePage {
   }
 
   private get searchInput(): Locator {
-    return this.page.locator('input[placeholder="Search"]');
+    // The search input field in the top right area (index 41 from viewport elements)
+    return this.page.locator('input').first();
   }
 
   private get dataTable(): Locator {
