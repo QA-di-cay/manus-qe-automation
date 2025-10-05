@@ -1,47 +1,29 @@
-import { test, expect } from '@playwright/test';
-import { LoginPage } from '../src/pom/operatorPortal/pages/login.page';
-import { LoginMfaPage } from '../src/pom/operatorPortal/pages/loginMfa.page';
-import { CompanyPage } from '../src/pom/operatorPortal/pages/company.page';
-import { DataIntegrationsPage } from '../src/pom/operatorPortal/pages/dataIntegrations.page';
+import { test, expect } from '@fixtures';
+import { CompanyPage } from '@opePortalPages';
 import { NewIntegrationPage } from '../src/pom/operatorPortal/pages/newIntegration.page';
-import { generateMfaCode } from '../src/utils/mfa.helper';
 
 require('dotenv').config();
 
-test.describe('Data Integrations', () => {
-  let loginPage: LoginPage;
-  let loginMfaPage: LoginMfaPage;
-  let companyPage: CompanyPage;
-  let dataIntegrationsPage: DataIntegrationsPage;
-  let newIntegrationPage: NewIntegrationPage;
-
-  test.beforeEach(async ({ page }) => {
-    loginPage = new LoginPage(page);
-    loginMfaPage = new LoginMfaPage(page);
-    companyPage = new CompanyPage(page);
-    dataIntegrationsPage = new DataIntegrationsPage(page);
-    newIntegrationPage = new NewIntegrationPage(page);
-
-    // Step 1: Log in to the Operator Portal 7.0 with valid credentials.
-    await page.goto(process.env.BASE_URL + '/transportme/admin');
-    await loginPage.login(process.env.ADMIN_USERNAME!, process.env.ADMIN_PASSWORD!);
-
-    // Handle MFA
-    const mfaCode = generateMfaCode(process.env.ADMIN_MFA_SECRET!); // Use the helper to generate MFA code
-    await loginMfaPage.enterMfaAndVerify(mfaCode);
+test.describe('Data Integrations - @dataIntegrations @settings', () => {
+  test.beforeEach(async ({ sharedPage }) => {
+    const companyPage = new CompanyPage(sharedPage);
+    await companyPage.navTo();
 
     // Select 'Automation Test' company
-    await companyPage.selectCompany('Automation Test');
-
-    // Step 2 & 3: Navigate to the 'Settings' section and then 'Data Integrations' section.
-    // Direct navigation to Data Integrations page after successful login and company selection
-    await page.goto(process.env.BASE_URL + '/transportme/index.php/config/integrations');
+    const gpsTrackingPage = await companyPage.searchAndAccessCompany('Automation Test');
+    
+    // Navigate to Data Integrations page
+    await sharedPage.goto(process.env.BASE_URL + '/transportme/index.php/config/integrations');
   });
 
-  test('Verify user can add new Data Integrations in Settings', async ({ page }) => {
+  test('Verify user can add new Data Integrations in Settings', async ({ sharedPage }) => {
+    // Create page object instance
+    const newIntegrationPage = new NewIntegrationPage(sharedPage);
+
     // Step 4: Click on the [Create/New...] button to add a new integration.
-    await dataIntegrationsPage.addNewDataIntegrationButton.click();
-    await expect(page.locator('text="New Integration"')).toBeVisible();
+    const addButton = sharedPage.locator('button, a').filter({ hasText: /create|new|add/i }).first();
+    await addButton.click();
+    await expect(sharedPage.locator('text="New Integration"')).toBeVisible();
 
     // Step 5: Fill in the required details for the new data integration
     const integrationName = `Test Integration ${Date.now()}`;
@@ -55,10 +37,9 @@ test.describe('Data Integrations', () => {
     await newIntegrationPage.saveIntegration();
 
     // Verify confirmation message (assuming a success alert appears)
-    await expect(page.locator('.v-alert__content')).toContainText('successfully added'); // Adjust selector based on actual UI
+    await expect(sharedPage.locator('.v-alert__content')).toContainText('successfully added'); // Adjust selector based on actual UI
 
     // Step 7: Verify that the new data integration appears in the list of existing integrations.
-    await expect(page.locator(`text=${integrationName}`)).toBeVisible();
+    await expect(sharedPage.locator(`text=${integrationName}`)).toBeVisible();
   });
 });
-
