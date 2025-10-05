@@ -1,0 +1,45 @@
+{
+  "name": "playwright-ts-demo",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "pretest": "barrelsby --directory src/pom/operatorPortal/pages --location all --delete && barrelsby --directory src/utils --location all --delete",
+    "test:all": "playwright test",
+    "test:login": "playwright test -g '@login'",
+    "test:holiday": "playwright test -g '@holiday'",
+    "test:pushToTalk": "playwright test -g '@pushToTalk'",
+    "test:generalInfo": "playwright test -g '@generalInfo'",
+    "test:referenceData": "playwright test -g '@referenceData'",
+    "test:ptbReport": "playwright test -g '@ptbReport'",
+    "test:ticketSellMode": "playwright test -g '@ticketSellMode'",
+
+    "test:settings": "playwright test -g '@settings'",
+
+    "test:icons": "playwright test -g '@icons'",
+  
+    "test:regression": "playwright test -g '@regression'",
+    "test:smoke": "playwright test -g '@regression'",
+    "test:login_smoke": "playwright test -g '@login|@smoke'",
+    "prepare": "playwright install --with-deps",
+    "test:all:bs": "browserstack-node-sdk -- playwright test",
+    "test:holiday:bs": "browserstack-node-sdk playwright test -g '@holiday'"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.36.0",
+    "@playwright/test": "^1.54.2",
+    "barrelsby": "^2.8.1",
+    "browserstack-node-sdk": "^1.42.5",
+    "dotenv": "^17.2.1",
+    "eslint": "^9.36.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.4",
+    "prettier": "^3.6.2",
+    "ts-node": "^10.9.2",
+    "tsconfig-paths": "^4.2.0",
+    "typescript": "^5.9.2",
+    "typescript-eslint": "^8.44.1"
+  },
+  "dependencies": {
+    "otplib": "^12.0.1"
+  }
+}
