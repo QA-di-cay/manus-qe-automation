@@ -1,70 +1,80 @@
-import { Page, expect } from '@playwright/test';
-import { Header } from '@headerComponent';
+import { Page, expect, Locator } from '@playwright/test';
+import { BasePage } from '@opePortalBasePage';
 
-export class TravelConfigPage {
-  readonly header: Header;
-
-  constructor(private readonly page: Page) {
-    this.header = new Header(page);
+export class TravelConfigPage extends BasePage {
+  constructor(page: Page) {
+    super(page, 'travelConfigPage');
   }
 
-  // ----- Locators -----
-  get newFreeTravelConfigBtn() {
+  //#region ====== LOCATORS ===================
+  private get newFreeTravelConfigBtn(): Locator {
     return this.page.getByRole('button', { name: /^\s*New Configuration\s*$/ });
   }
-  get configNameTextbox() {
+
+  private get configNameTextbox(): Locator {
     return this.page.getByLabel('Configuration name *');
   }
-  get durationTextbox() {
+
+  private get durationTextbox(): Locator {
     return this.page.locator('label:has-text("Duration (minutes)") + input');
   }
-  get freeSessionsTextbox() {
+
+  private get freeSessionsTextbox(): Locator {
     return this.page.locator('label:has-text("Free sessions") + input');
   }
-  get validFromTimePicker() {
+
+  private get validFromTimePicker(): Locator {
     return this.page.locator('label:has-text("Valid from") + input');
   }
-  get validToTimePicker() {
+
+  private get validToTimePicker(): Locator {
     return this.page.locator('label:has-text("Valid to") + input');
   }
-  get excludePublicHolidayCheckbox() {
+
+  private get excludePublicHolidayCheckbox(): Locator {
     return this.page.locator('div[class="v-input__slot"]:has-text("Exclude public holiday") input');
   }
-  get excludeSchoolHolidayCheckbox() {
+
+  private get excludeSchoolHolidayCheckbox(): Locator {
     return this.page.locator('div[class="v-input__slot"]:has-text("Exclude school holiday") input');
   }
-  get saveBtn() {
+
+  private get saveBtn(): Locator {
     return this.page.locator('span:has-text("Save")');
   }
+  //#endregion ================================
 
-  // ----- Guards -----
-  async expectLoaded() {
+  //#region ====== GUARDS =====================
+  protected async loadCondition(): Promise<void> {
     await Promise.all([
       expect(this.newFreeTravelConfigBtn).toBeVisible(),
     ]);
   }
+  //#endregion ================================
 
-  // ----- Actions -----
+  //#region ====== ACTIONS ====================
   async createFreeTravelConfig(
     configurationName: string,
     duration: number = 40,
     freeSessions: number = 1,
     holidayType: 'public' | 'school'
-  ) {
+  ): Promise<void> {
     await this.newFreeTravelConfigBtn.click();
     await this.configNameTextbox.fill(configurationName);
     await this.durationTextbox.fill(duration.toString());
     await this.freeSessionsTextbox.fill(freeSessions.toString());
     await this.validFromTimePicker.pressSequentially("0100A", { delay: 100 });
     await this.validToTimePicker.pressSequentially("1200P", { delay: 100 });
-    const Checkbox =
-      holidayType === 'public'
-        ? this.excludePublicHolidayCheckbox
-        : this.excludeSchoolHolidayCheckbox;
+    
+    const checkbox = holidayType === 'public' 
+      ? this.excludePublicHolidayCheckbox 
+      : this.excludeSchoolHolidayCheckbox;
 
-    if (!(await Checkbox.isChecked())) {
-      await Checkbox.check();
+    if (!(await checkbox.isChecked())) {
+      await checkbox.check();
     }
+    
     await this.saveBtn.click();
   }
+  //#endregion ================================
 }
