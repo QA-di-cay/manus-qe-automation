@@ -17,6 +17,7 @@ export const Routes = {
   ticketSellModePage: { path: '/transportme/config/setting_ticket_sell_mode', title: 'Ticket Sell Mode' },
   driverApp:          { path: '/transportme/config/setting_driver_app', title: 'Driver App' },
   dataIntegration:    { path: '/transportme/config/integrations', title: 'Data Integrations' },
+  pushToTalkPage:     { path: '/transportme/config/push_to_talk', title: 'Push To Talk' },
 
 
   // Smart Card
