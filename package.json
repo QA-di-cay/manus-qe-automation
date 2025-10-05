@@ -12,11 +12,8 @@
     "test:referenceData": "playwright test -g '@referenceData'",
     "test:ptbReport": "playwright test -g '@ptbReport'",
     "test:ticketSellMode": "playwright test -g '@ticketSellMode'",
-
     "test:settings": "playwright test -g '@settings'",
-
     "test:icons": "playwright test -g '@icons'",
-  
     "test:regression": "playwright test -g '@regression'",
     "test:smoke": "playwright test -g '@regression'",
     "test:login_smoke": "playwright test -g '@login|@smoke'",
@@ -40,6 +37,7 @@
     "typescript-eslint": "^8.44.1"
   },
   "dependencies": {
-    "otplib": "^12.0.1"
+    "otplib": "^12.0.1",
+    "playwright": "^1.55.1"
   }
 }
