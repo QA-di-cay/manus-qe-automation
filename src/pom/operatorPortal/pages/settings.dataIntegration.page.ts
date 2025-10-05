@@ -1,5 +1,5 @@
 import { expect, Locator, Page } from '@playwright/test';
-import { BasePage } from '@operatorPortalPages';
+import { BasePage } from '@opePortalBasePage';
 
 export class DataIntegrationPage extends BasePage {
   constructor(page: Page) {

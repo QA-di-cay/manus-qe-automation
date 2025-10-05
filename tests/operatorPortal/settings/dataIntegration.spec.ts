@@ -1,5 +1,5 @@
 import { test } from '@fixtures';
-import { CompanyPage, DataIntegrationPage } from '@operatorPortalPages';
+import { CompanyPage, DataIntegrationPage } from '@opePortalPages';
 
 const companyName = "Automation Test";
 
@@ -14,7 +14,7 @@ test.describe('Data Integration testcases - @dataIntegrations @settings', () => 
     await sharedPage.goto(process.env.BASE_URL + '/transportme/index.php/config/integrations');
   });
 
-  test('[TC-1649] [OP 7.0] Verify user can add new [Data Integrations] in Settings', async ({ sharedPage }) => {
+  test.only('[TC-1649] [OP 7.0] Verify user can add new [Data Integrations] in Settings', async ({ sharedPage }) => {
     const dataIntegrationPage = new DataIntegrationPage(sharedPage);
     
     // Step 01: User is successfully logged into the Operator Portal 7.0 (handled in beforeEach)
