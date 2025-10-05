@@ -13,6 +13,7 @@
     "test:ptbReport": "playwright test -g '@ptbReport'",
     "test:ticketSellMode": "playwright test -g '@ticketSellMode'",
     "test:settings": "playwright test -g '@settings'",
+    "test:dataIntegrations": "playwright test -g '@dataIntegrations'",
     "test:icons": "playwright test -g '@icons'",
     "test:regression": "playwright test -g '@regression'",
     "test:smoke": "playwright test -g '@regression'",
