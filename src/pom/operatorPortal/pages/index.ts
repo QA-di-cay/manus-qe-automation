@@ -6,6 +6,7 @@ export * from "./admin.company.page";
 export * from "./gpsTracking.liveTracking.page";
 export * from "./login.page";
 export * from "./loginMfa.page";
+export * from "./newIntegration.page";
 export * from "./settings.dataIntegration.page";
 export * from "./settings.driverApp.page";
 export * from "./settings.fatigueManagement.page";

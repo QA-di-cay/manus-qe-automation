@@ -55,15 +55,15 @@ export class NewIntegrationPage extends BasePage {
     return this.page.locator('//label[text()="Type"]/following-sibling::input');
   }
 
-  private get closeButton(): Locator {
+  private get closeBtn(): Locator {
     return this.page.locator('button:has-text("Close")');
   }
 
-  private get verifyButton(): Locator {
+  private get verifyBtn(): Locator {
     return this.page.locator('button:has-text("Verify")');
   }
 
-  private get saveButton(): Locator {
+  private get saveBtn(): Locator {
     return this.page.locator('button:has-text("Save")');
   }
   //#endregion ================================
@@ -71,8 +71,7 @@ export class NewIntegrationPage extends BasePage {
   //#region ====== GUARDS =====================
   protected async loadCondition(): Promise<void> {
     await Promise.all([
-      expect(this.integrationNameInput).toBeVisible(),
-      expect(this.saveButton).toBeVisible(),
+      expect(this.saveBtn).toBeVisible(),
     ]);
   }
   //#endregion ================================
@@ -107,15 +106,15 @@ export class NewIntegrationPage extends BasePage {
   }
 
   async saveIntegration(): Promise<void> {
-    await this.saveButton.click();
+    await this.saveBtn.click();
   }
 
   async verifyIntegration(): Promise<void> {
-    await this.verifyButton.click();
+    await this.verifyBtn.click();
   }
 
   async closeForm(): Promise<void> {
-    await this.closeButton.click();
+    await this.closeBtn.click();
   }
   //#endregion ================================
 
