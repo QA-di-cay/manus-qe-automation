@@ -1,12 +1,12 @@
-import { Locator, Page } from '@playwright/test';
+import { Page, expect, Locator } from '@playwright/test';
+import { BasePage } from '@opePortalBasePage';
 
-export class NewIntegrationPage {
-  private readonly page: Page;
-
+export class NewIntegrationPage extends BasePage {
   constructor(page: Page) {
-    this.page = page;
+    super(page, 'newIntegrationPage');
   }
 
+  //#region ====== LOCATORS ===================
   private get integrationNameInput(): Locator {
     return this.page.locator('//label[text()="Integration Name"]/following-sibling::input');
   }
@@ -66,25 +66,69 @@ export class NewIntegrationPage {
   private get saveButton(): Locator {
     return this.page.locator('button:has-text("Save")');
   }
+  //#endregion ================================
 
-  async fillIntegrationDetails(integrationName: string, url: string, authToken: string, type: string) {
+  //#region ====== GUARDS =====================
+  protected async loadCondition(): Promise<void> {
+    await Promise.all([
+      expect(this.integrationNameInput).toBeVisible(),
+      expect(this.saveButton).toBeVisible(),
+    ]);
+  }
+  //#endregion ================================
+
+  //#region ====== ACTIONS ====================
+  async fillIntegrationDetails(integrationName: string, url: string, authToken: string, type: string): Promise<void> {
     await this.integrationNameInput.fill(integrationName);
     await this.urlInput.fill(url);
     await this.authorisationTokenInput.fill(authToken);
     await this.typeDropdown.click();
-    await this.page.locator(`text=${type}`).click(); // Assuming type is a visible option after clicking the dropdown
+    await this.page.locator(`text=${type}`).click();
   }
 
-  async saveIntegration() {
+  async fillOptionalFields(options: {
+    areaCode?: string;
+    companyCode?: string;
+    apiVersion?: string;
+    appCode?: string;
+    tass?: string;
+    smartcardField?: string;
+    studentStatuses?: string;
+    lastRunAt?: string;
+  }): Promise<void> {
+    if (options.areaCode) await this.areaCodeInput.fill(options.areaCode);
+    if (options.companyCode) await this.companyCodeInput.fill(options.companyCode);
+    if (options.apiVersion) await this.apiVersionInput.fill(options.apiVersion);
+    if (options.appCode) await this.appCodeInput.fill(options.appCode);
+    if (options.tass) await this.tassInput.fill(options.tass);
+    if (options.smartcardField) await this.smartcardFieldInput.fill(options.smartcardField);
+    if (options.studentStatuses) await this.studentStatusesInput.fill(options.studentStatuses);
+    if (options.lastRunAt) await this.lastRunAtInput.fill(options.lastRunAt);
+  }
+
+  async saveIntegration(): Promise<void> {
     await this.saveButton.click();
   }
 
-  async verifyIntegration() {
+  async verifyIntegration(): Promise<void> {
     await this.verifyButton.click();
   }
 
-  async closeForm() {
+  async closeForm(): Promise<void> {
     await this.closeButton.click();
   }
-}
+  //#endregion ================================
 
+  //#region ====== ASSERTS ====================
+  async verifySaveSuccess(): Promise<void> {
+    // Add verification logic for successful save
+    // This could be checking for success message, redirect, etc.
+  }
+
+  async verifyFormVisible(): Promise<void> {
+    await expect(this.integrationNameInput).toBeVisible();
+    await expect(this.urlInput).toBeVisible();
+    await expect(this.authorisationTokenInput).toBeVisible();
+  }
+  //#endregion ================================
+}
