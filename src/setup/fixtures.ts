@@ -10,20 +10,14 @@ type WorkerFixtures = {
 };
 
 export const test = base.extend<TestFixtures, WorkerFixtures>({
-  // Worker-scoped: Log in once for all tests within a worker.
+  // Worker-scoped
   sharedContext: [async ({ browser }, use) => {
-    // Create context with baseURL to fix navigation issues
-    const baseURL = process.env.BASE_URL;
-    console.log('Creating shared context with baseURL:', baseURL);
-    
+    const baseURL = process.env.BASE_URL;    
     const context = await browser.newContext({
       baseURL: baseURL
     });
-
-    // Login using a temporary tab
     const page = await context.newPage();
     const loginPage = new LoginPage(page);
-    
     try {
       await loginPage.access();
       await loginPage.loginSuccess(
@@ -31,27 +25,19 @@ export const test = base.extend<TestFixtures, WorkerFixtures>({
         process.env.ADMIN_PASSWORD!,
         process.env.ADMIN_MFA_SECRET!
       );
-      console.log('Shared authentication completed successfully');
     } catch (error) {
       console.error('Shared authentication failed:', error);
       throw error;
     }
-    
     await page.close();
-
     await use(context);
     await context.close();
-  }, { scope: 'worker', auto: true }],
+  }, { scope: 'worker', auto: false }],
 
-  // Worker-scoped: a single page is reused across all tests in the worker
-  sharedPage: [async ({ sharedContext }, use) => {
+  // Test-scoped
+  sharedPage: async ({ sharedContext }, use) => {
     const page = await sharedContext.newPage();
-    
-    // Navigate to company page to start from authenticated state
-    await page.goto('/transportme/index.php/company');
-    console.log('sharedPage initialized at:', page.url());
-    
     await use(page);
     await page.close();
-  }, { scope: 'worker' }],
+  },
 });
