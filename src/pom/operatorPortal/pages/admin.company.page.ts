@@ -35,7 +35,10 @@ export class CompanyPage extends BasePage {
 
   //#region ====== ACTIONS ====================
   async navTo() {
-    await this.page.goto('/transportme/index.php/company');
+    // Check if already on company page to avoid unnecessary navigation
+    if (!this.page.url().includes('/company')) {
+      await this.page.goto('/transportme/index.php/company');
+    }
     await this.expectLoaded();
   }
   async searchAndAccessCompany(

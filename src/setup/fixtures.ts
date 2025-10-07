@@ -27,7 +27,7 @@ export const test = base.extend<TestFixtures, WorkerFixtures>({
 
     await use(context);
     await context.close();
-  }, { scope: 'worker', auto: false }],
+  }, { scope: 'worker', auto: true }],
 
   // Test-scoped: a new tab is opened for each test using the authenticated context.
   sharedPage: async ({ sharedContext }, use) => {
