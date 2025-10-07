@@ -10,77 +10,34 @@ type WorkerFixtures = {
 };
 
 export const test = base.extend<TestFixtures, WorkerFixtures>({
-  // Worker-scoped: Log in once for all tests within a worker.
+  // Worker-scoped
   sharedContext: [async ({ browser }, use) => {
-    let context: BrowserContext | null = null;
-    let loginAttempts = 0;
-    const maxLoginAttempts = 3;
-    
+    const baseURL = process.env.BASE_URL;    
+    const context = await browser.newContext({
+      baseURL: baseURL
+    });
+    const page = await context.newPage();
+    const loginPage = new LoginPage(page);
     try {
-      context = await browser.newContext({
-        baseURL: process.env.BASE_URL
-      });
-      
-      // Retry login mechanism
-      while (loginAttempts < maxLoginAttempts) {
-        try {
-          loginAttempts++;
-          console.log(`Shared authentication attempt ${loginAttempts}/${maxLoginAttempts}`);
-          
-          // Login once per worker on temporary page
-          const page = await context.newPage();
-          const loginPage = new LoginPage(page);
-          
-          await loginPage.access();
-          await loginPage.loginSuccess(
-            process.env.ADMIN_USERNAME!,
-            process.env.ADMIN_PASSWORD!,
-            process.env.ADMIN_MFA_SECRET!
-          );
-          
-          console.log('Shared authentication completed successfully');
-          
-          // Wait for successful login and navigation to dashboard/company page
-          await page.waitForURL(/\/dashboard|\/company/i, { timeout: 15000 });
-          console.log(`Authenticated and navigated to: ${page.url()}`);
-          
-          // Close temporary page after login
-          await page.close();
-          
-          // If we reach here, login was successful
-          break;
-          
-        } catch (error) {
-          console.error(`Shared authentication attempt ${loginAttempts} failed:`, error);
-          
-          if (loginAttempts >= maxLoginAttempts) {
-            throw new Error(`Shared authentication failed after ${maxLoginAttempts} attempts. Last error: ${error}`);
-          }
-          
-          // Wait before retry
-          await new Promise(resolve => setTimeout(resolve, 2000));
-        }
-      }
-      
-      await use(context);
-      
+      await loginPage.access();
+      await loginPage.loginSuccess(
+        process.env.ADMIN_USERNAME!,
+        process.env.ADMIN_PASSWORD!,
+        process.env.ADMIN_MFA_SECRET!
+      );
     } catch (error) {
-      console.error('Critical error in shared authentication:', error);
+      console.error('Shared authentication failed:', error);
       throw error;
-    } finally {
-      if (context) {
-        await context.close();
-      }
     }
+    await page.close();
+    await use(context);
+    await context.close();
   }, { scope: 'worker', auto: false }],
 
-  // Test-scoped: each test gets a new page from the authenticated context
+  // Test-scoped
   sharedPage: async ({ sharedContext }, use) => {
     const page = await sharedContext.newPage();
-    try {
-      await use(page);
-    } finally {
-      await page.close();
-    }
+    await use(page);
+    await page.close();
   },
 });
