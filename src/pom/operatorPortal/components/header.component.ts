@@ -192,7 +192,7 @@ export class Header {
     return this.clickSubMenu('Data Integrations', accessTo.DataIntegrationPage);
   }
   async accessGeofenceRangePage(): Promise<accessTo.GeofenceRangePage> {
-    return this.clickSubMenu('Data Integrations', accessTo.GeofenceRangePage);
+    return this.clickSubMenu('Geofence Range', accessTo.GeofenceRangePage);
   }
   //#endregion ================================
 
