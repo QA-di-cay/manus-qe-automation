@@ -43,8 +43,8 @@ export const test = base.extend<TestFixtures, WorkerFixtures>({
     await context.close();
   }, { scope: 'worker', auto: true }],
 
-  // Test-scoped: a new tab is opened for each test using the authenticated context.
-  sharedPage: async ({ sharedContext }, use) => {
+  // Worker-scoped: a single page is reused across all tests in the worker
+  sharedPage: [async ({ sharedContext }, use) => {
     const page = await sharedContext.newPage();
     
     // Navigate to company page to start from authenticated state
@@ -53,5 +53,5 @@ export const test = base.extend<TestFixtures, WorkerFixtures>({
     
     await use(page);
     await page.close();
-  },
+  }, { scope: 'worker' }],
 });

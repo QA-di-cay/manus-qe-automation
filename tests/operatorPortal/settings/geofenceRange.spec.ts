@@ -6,6 +6,26 @@ const companyName = "Automation Test";
 
 test.describe('Geofence Range testcases - @geofenceRange @settings', () => {
   test.beforeEach(async ({ sharedPage }) => {
+    // Check if we're already on the target page to avoid unnecessary navigation
+    const currentUrl = sharedPage.url();
+    const isOnGeofencePage = currentUrl.includes('/config/geofence');
+    
+    if (isOnGeofencePage) {
+      // Already on geofence page, skip navigation
+      return;
+    }
+    
+    // Check if we're on GPS tracking page for the right company
+    const isOnGpsTrackingPage = currentUrl.includes('/gpstracking');
+    if (isOnGpsTrackingPage) {
+      // Already on GPS tracking page, just navigate to geofence
+      const { LiveTrackingPage } = await import('@opePortalPages');
+      const gpsTrackingPage = new LiveTrackingPage(sharedPage);
+      await gpsTrackingPage.header.accessGeofenceRangePage();
+      return;
+    }
+    
+    // Full navigation from company page
     const companyPage = new CompanyPage(sharedPage);
     await companyPage.navTo();
 
