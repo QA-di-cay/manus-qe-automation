@@ -19,7 +19,7 @@ export default defineConfig({
   fullyParallel: true,
 
   // Number of parallel workers (default = CPU cores if not set)
-  workers: 1, 
+  workers: 2, 
 
   // Reporters: show line output, HTML report, and list format
   reporter: [
