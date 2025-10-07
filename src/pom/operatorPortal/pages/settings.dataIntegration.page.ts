@@ -8,15 +8,15 @@ export class DataIntegrationPage extends BasePage {
 
   //#region ====== LOCATORS ===================
   private get addNewBtn(): Locator {
-    return this.page.locator("//span[contains(text(),'Add New Data Integrations')]//parent::button");
+    return this.page.locator("xpath=//span[contains(text(),'Add New Data Integrations')]//parent::button");
   };
 
   private get searchIpt(): Locator {
-    return this.page.locator("//label[contains(text(),'Search')]//parent::div");
+    return this.page.locator("xpath=//label[contains(text(),'Search')]//parent::div");
   };
 
   private get newIntegrationForm(): Locator {
-    return this.page.locator("//div[contains(text(),'New Integration')]/ancestor::form");
+    return this.page.locator("xpath=//div[contains(text(),'New Integration')]/ancestor::form");
   };
 
   private itgFormIpt(
@@ -33,7 +33,7 @@ export class DataIntegrationPage extends BasePage {
       'Student Statuses' |
       'Last Run at'
     ): Locator {
-    return this.newIntegrationForm.locator(`//label[contains(text(),'${text}')]/following-sibling::input`);
+    return this.newIntegrationForm.locator(`xpath=//label[contains(text(),'${text}')]/following-sibling::input`);
   };
 
   private itgFormBtn(
@@ -42,7 +42,7 @@ export class DataIntegrationPage extends BasePage {
       'Verify' |
       'Save'
   ): Locator {
-    return this.newIntegrationForm.locator(`//span[contains(text(),'${text}')]/parent::button`);
+    return this.newIntegrationForm.locator(`xpath=//span[contains(text(),'${text}')]/parent::button`);
   };
 
   //#endregion ================================

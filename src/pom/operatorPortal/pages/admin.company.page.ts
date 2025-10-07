@@ -13,7 +13,7 @@ export class CompanyPage extends BasePage {
     return this.page.locator('button[aria-label="Add New Company"]');
   }
   private get searchTextBox(): Locator {
-    return this.page.locator("//*[contains(text(), 'Search')]/following-sibling::input");
+    return this.page.locator("xpath=//*[contains(text(), 'Search')]/following-sibling::input");
   }
   private company(name: string): Locator {
     return this.page.getByText(name, { exact: true });
@@ -38,10 +38,7 @@ export class CompanyPage extends BasePage {
     // With shared authentication, page should already be on company page
     // Just verify we're loaded correctly
     if (!this.page.url().includes('/company')) {
-      console.log('navTo: Not on company page, navigating from:', this.page.url());
       await this.page.goto('/transportme/index.php/company');
-    } else {
-      console.log('navTo: Already on company page:', this.page.url());
     }
     await this.expectLoaded();
   }

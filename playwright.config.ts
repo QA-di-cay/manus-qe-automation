@@ -29,7 +29,7 @@ export default defineConfig({
 
   // Default settings for all tests
   use: {
-    headless: false,                     // run browsers in headless mode
+    headless: true,                     // run browsers in headless mode
     baseURL: process.env.BASE_URL,      // global base URL
     screenshot: 'only-on-failure',      // take screenshots only if test fails
     video: 'retain-on-failure',         // keep video only for failed tests

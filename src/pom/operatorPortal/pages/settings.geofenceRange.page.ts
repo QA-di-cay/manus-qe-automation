@@ -12,15 +12,15 @@ export class GeofenceRangePage extends BasePage {
       'Geofence range for changing stop (meter)' |
       'Geofence range for alerting message (meter)'
     ): Locator {
-    return this.page.locator(`//label[contains(text(),'${iptFieldText}')]/following-sibling::input`);
+    return this.page.locator(`xpath=//label[contains(text(),'${iptFieldText}')]/following-sibling::input`);
   };
 //label[contains(text(),'Geofence range for changing stop (meter)')]/following-sibling::input/ancestor::div[contains(@class,'row')]//div[@role='alert']//div[contains(text(),'is required')]
   private get saveBtn(): Locator {
-    return this.page.locator("//span[contains(text(),'Save')]//parent::button");
+    return this.page.locator("xpath=//span[contains(text(),'Save')]//parent::button");
   };
 
   private alert(inputField: Locator, alertTxt: string): Locator {
-    return inputField.locator(`/ancestor::div[contains(@class,'row')]//div[@role='alert']//div[contains(text(),'${alertTxt}')]`);
+    return inputField.locator(`xpath=/ancestor::div[contains(@class,'row')]//div[@role='alert']//div[contains(text(),'${alertTxt}')]`);
   }
   //#endregion ================================
 
@@ -52,7 +52,7 @@ export class GeofenceRangePage extends BasePage {
       'Geofence range for alerting message (meter)'
   ): Promise<void> {
     const inputField = this.iptField(iptFieldText);
-    inputField.fill('');
+    await inputField.fill('');
     await this.clickOutside(inputField);
   }
 
@@ -63,7 +63,8 @@ export class GeofenceRangePage extends BasePage {
     value: string
   ): Promise<void> {
     const inputField = this.iptField(iptFieldText);
-    inputField.fill(value);
+    await inputField.fill('');
+    await this.page.keyboard.type(value);
     await this.clickOutside(inputField);
   }
   //#endregion ================================
