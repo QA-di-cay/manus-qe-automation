@@ -13,6 +13,7 @@ const subMenuMap: Record<string, string> = {
   // Settings
   'holiday': 'settings',
   'general information': 'settings',
+  'geofence range': 'settings',
   'push to talk': 'settings',
   'reference data': 'settings',
   'fatigue management': 'settings',
