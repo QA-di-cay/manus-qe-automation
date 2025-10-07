@@ -46,6 +46,11 @@ export const test = base.extend<TestFixtures, WorkerFixtures>({
   // Test-scoped: a new tab is opened for each test using the authenticated context.
   sharedPage: async ({ sharedContext }, use) => {
     const page = await sharedContext.newPage();
+    
+    // Navigate to company page to start from authenticated state
+    await page.goto('/transportme/index.php/company');
+    console.log('sharedPage initialized at:', page.url());
+    
     await use(page);
     await page.close();
   },

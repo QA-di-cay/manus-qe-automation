@@ -35,9 +35,13 @@ export class CompanyPage extends BasePage {
 
   //#region ====== ACTIONS ====================
   async navTo() {
-    // Check if already on company page to avoid unnecessary navigation
+    // With shared authentication, page should already be on company page
+    // Just verify we're loaded correctly
     if (!this.page.url().includes('/company')) {
+      console.log('navTo: Not on company page, navigating from:', this.page.url());
       await this.page.goto('/transportme/index.php/company');
+    } else {
+      console.log('navTo: Already on company page:', this.page.url());
     }
     await this.expectLoaded();
   }
