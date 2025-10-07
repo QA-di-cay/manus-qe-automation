@@ -15,13 +15,13 @@ export const Routes = {
   holidayPage:        { path: '/transportme/ph', title: 'Holidays' },
   referenceDataPage:  { path: '/transportme/config/ptb_report', title: 'Reference Data' },
   ticketSellModePage: { path: '/transportme/config/setting_ticket_sell_mode', title: 'Ticket Sell Mode' },
-  driverApp:          { path: '/transportme/config/setting_driver_app', title: 'Driver App' },
-  dataIntegration:    { path: '/transportme/config/integrations', title: 'Data Integrations' },
+  driverAppPage:      { path: '/transportme/config/setting_driver_app', title: 'Driver App' },
+  dataIntegrationPage:{ path: '/transportme/config/integrations', title: 'Data Integrations' },
   pushToTalkPage:     { path: '/transportme/config/push_to_talk', title: 'Push To Talk' },
-  newIntegrationPage: { path: '/transportme/config/integrations/new', title: 'New Integration' },
   offlineDataPage:    { path: '/transportme/config/offline_data', title: 'Offline Data' },
   passengerAppPage:   { path: '/transportme/config/passenger_app', title: 'Passenger App' },
   publicTrackingPage: { path: '/transportme/config/public_tracking', title: 'Public Tracking' },
+  geofenceRangePage:  { path: '/transportme/config/geofence', title: 'Geofence Range' },
 
   // Smart Card
   travelConfigPage:   { path: '/transportme/smart_cards/smartcard_config', title: 'Travel Configuration' },

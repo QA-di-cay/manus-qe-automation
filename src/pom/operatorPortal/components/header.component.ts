@@ -18,6 +18,7 @@ const subMenuMap: Record<string, string> = {
   'fatigue management': 'settings',
   'ptb report': 'settings',
   'ticket sell mode': 'settings',
+  'data integrations': 'settings',
 
   // Smartcards
   'travel configuration': 'smartcards',
@@ -186,6 +187,12 @@ export class Header {
   }
   async accessDriverAppPage(): Promise<accessTo.DriverAppPage> {
     return this.clickSubMenu('Ticket Sell Mode', accessTo.DriverAppPage);
+  }
+  async accessDataIntegrationPage(): Promise<accessTo.DataIntegrationPage> {
+    return this.clickSubMenu('Data Integrations', accessTo.DataIntegrationPage);
+  }
+  async accessGeofenceRangePage(): Promise<accessTo.GeofenceRangePage> {
+    return this.clickSubMenu('Data Integrations', accessTo.GeofenceRangePage);
   }
   //#endregion ================================
 

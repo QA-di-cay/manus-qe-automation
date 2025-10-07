@@ -3,7 +3,7 @@ import { BasePage } from '@opePortalBasePage';
 
 export class DriverAppPage extends BasePage {
   constructor(page: Page) {
-    super(page, 'driverApp');
+    super(page, 'driverAppPage');
   }
 
   //#region ====== LOCATORS ===================
