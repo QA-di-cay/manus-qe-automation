@@ -145,10 +145,39 @@ export class Header {
     pageObject: new (page: Page) => TargetPage
   ): Promise<TargetPage> {
     const menuText = this.getMenuText(subMenuText);
+    
+    // Hover menu and wait for submenu to be visible
     await this.hoverMenu(menuText);
-    await this.subMenuItem(subMenuText).waitFor({ state: 'visible', timeout: 1500 }),
-      await expect(this.subMenuItem(subMenuText)).toBeVisible();
-    await this.subMenuItem(subMenuText).click();
+    
+    // Wait for submenu item to be visible and stable
+    const subMenuItem = this.subMenuItem(subMenuText);
+    await subMenuItem.waitFor({ state: 'visible', timeout: 3000 });
+    await expect(subMenuItem).toBeVisible();
+    
+    // Wait a bit for element to be stable
+    await this.page.waitForTimeout(200);
+    
+    // Click with retry mechanism
+    let attempts = 0;
+    const maxAttempts = 3;
+    
+    while (attempts < maxAttempts) {
+      try {
+        await subMenuItem.click({ timeout: 5000 });
+        break;
+      } catch (error) {
+        attempts++;
+        if (attempts >= maxAttempts) {
+          console.error(`Failed to click submenu "${subMenuText}" after ${maxAttempts} attempts`);
+          throw error;
+        }
+        console.log(`Click attempt ${attempts} failed, retrying...`);
+        await this.page.waitForTimeout(500);
+        // Re-hover menu in case it closed
+        await this.hoverMenu(menuText);
+        await subMenuItem.waitFor({ state: 'visible', timeout: 2000 });
+      }
+    }
 
     const targetPage = new pageObject(this.page);
     await targetPage.expectLoaded();
