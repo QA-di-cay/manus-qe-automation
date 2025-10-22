@@ -19,13 +19,13 @@
       "@opePortalComp":     ["src/pom/operatorPortal/components"],
       "@opePortalRoutes":   ["src/pom/operatorPortal/routes"],
       "@opePortalPages":    ["src/pom/operatorPortal/pages/index"],
-      "@opePortalTypes":    ["src/pom/operatorPortal/types.ts"],
+      "@opePortalTypes":    ["src/pom/operatorPortal/types"],
       "@routes":            ["src/pom/operatorPortal/routes"],
       "@fixtures":          ["src/setup/fixtures"],
       "@data/*":            ["src/data/*"],
       "@globalSetup":       ["src/setup/globalSetup"],
       "@utils":             ["src/utils"],
-      "@opePortalGeneEl":   ["src/pom/operatorPortal/generic.element.ts"],
+      "@opePortalGeneEl":   ["src/pom/operatorPortal/generic.element.ts"]
     }
   },
   "include": [
