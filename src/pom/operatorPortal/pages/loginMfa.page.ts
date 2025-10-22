@@ -1,46 +1,30 @@
-import { Page, expect, Locator } from '@playwright/test';
-import { BasePage } from '@opePortalBasePage';
-import { generateOtp } from '@utils';
-import { CompanyPage } from '@opePortalPages';
+import { Page, Locator } from '@playwright/test';
+import { GenericElement } from '@opePortalGeneEl';
 
-export class MfaPage extends BasePage {
-  constructor(page: Page) {
-    super(page, 'loginMfaPage');
+export class LoginMfaPage {
+  constructor(public readonly page: Page) {
+    this.element = new GenericElement(page);
   }
 
-  //#region ====== LOCATORS ===================
-  private get otpInput(): Locator {
-    return this.page.locator('form#frm1 input[name="code"]');
+  public readonly element: GenericElement;
+
+  public get emailInput(): Locator {
+    return this.element.inputByName('email');
   }
 
-  private get submitBtn(): Locator {
-    return this.page.locator('form#frm1 input[type="submit"]');
+  public get passwordInput(): Locator {
+    return this.element.inputByName('password');
   }
-  //#endregion ================================
 
-
-  //#region ====== GUARDS =====================
-  protected async loadCondition(): Promise<void> {
-    await Promise.all([
-      expect(this.otpInput).toBeVisible(),
-      expect(this.submitBtn).toBeVisible(),
-    ]);
+  public get loginButton(): Locator {
+    return this.element.buttonByText('Login');
   }
-  //#endregion ================================
 
-
-  //#region ====== ACTIONS ====================
-  async submitValidOtp(
-    mfaSecret: string,
-    submitWithEnter: boolean = false
-  ): Promise<CompanyPage> {
-    const otp = await generateOtp(mfaSecret, this.page);
-    await this.otpInput.fill(otp);
-    await (submitWithEnter ? this.otpInput.press('Enter') : this.submitBtn.click());
-
-    const adminCompanyPage = new CompanyPage(this.page);
-    await adminCompanyPage.expectLoaded();
-    return adminCompanyPage;
+  public get mfaCodeInput(): Locator {
+    return this.element.inputByName('mfaCode');
   }
-  //#endregion ================================
+
+  public get verifyButton(): Locator {
+    return this.element.buttonByText('Verify');
+  }
 }

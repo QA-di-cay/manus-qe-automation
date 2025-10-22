@@ -1,80 +1,78 @@
-import { Page, expect, Locator } from '@playwright/test';
-import { BasePage } from '@opePortalBasePage';
+import { Page } from '@playwright/test';
+import { GenericElement } from '@opePortalGeneEl';
 
-export class TravelConfigPage extends BasePage {
-  constructor(page: Page) {
-    super(page, 'travelConfigPage');
+export class SmartCardsTravelConfigurationPage {
+  readonly element: GenericElement;
+  constructor(private page: Page) {
+    this.element = new GenericElement(page);
   }
 
-  //#region ====== LOCATORS ===================
-  private get newFreeTravelConfigBtn(): Locator {
-    return this.page.getByRole('button', { name: /^\s*New Configuration\s*$/ });
+  // Existing locators
+  async getButtonByText(text: string) {
+    return this.element.buttonByText(text);
   }
 
-  private get configNameTextbox(): Locator {
-    return this.page.getByLabel('Configuration name *');
+  async getInputByName(name: string) {
+    return this.element.inputByName(name);
   }
 
-  private get durationTextbox(): Locator {
-    return this.page.locator('label:has-text("Duration (minutes)") + input');
+  async getPlaceholderInput(placeholder: string) {
+    return this.element.inputByPlaceholder(placeholder);
   }
 
-  private get freeSessionsTextbox(): Locator {
-    return this.page.locator('label:has-text("Free sessions") + input');
+  async getLabelInput(label: string) {
+    return this.element.inputByLabel(label);
   }
 
-  private get validFromTimePicker(): Locator {
-    return this.page.locator('label:has-text("Valid from") + input');
+  async getDropdownInput(label: string) {
+    return this.element.dropdownByLabel(label);
   }
 
-  private get validToTimePicker(): Locator {
-    return this.page.locator('label:has-text("Valid to") + input');
+  async getDropdownOption(option: string) {
+    return this.element.dropdownOption(option);
   }
 
-  private get excludePublicHolidayCheckbox(): Locator {
-    return this.page.locator('div[class="v-input__slot"]:has-text("Exclude public holiday") input');
+  async getDropdownOptionByClass(option: string) {
+    return this.element.dropdownOptionByClass(option);
   }
 
-  private get excludeSchoolHolidayCheckbox(): Locator {
-    return this.page.locator('div[class="v-input__slot"]:has-text("Exclude school holiday") input');
+  async getTableCell(row: number, col: number) {
+    return this.element.tableCell(row, col);
   }
 
-  private get saveBtn(): Locator {
-    return this.page.locator('span:has-text("Save")');
+  async getTableRowByText(text: string) {
+    return this.element.tableRowByText(text);
   }
-  //#endregion ================================
 
-  //#region ====== GUARDS =====================
-  protected async loadCondition(): Promise<void> {
-    await Promise.all([
-      expect(this.newFreeTravelConfigBtn).toBeVisible(),
-    ]);
+  async getLinkByText(text: string) {
+    return this.element.linkByText(text);
   }
-  //#endregion ================================
 
-  //#region ====== ACTIONS ====================
-  async createFreeTravelConfig(
-    configurationName: string,
-    duration: number = 40,
-    freeSessions: number = 1,
-    holidayType: 'public' | 'school'
-  ): Promise<void> {
-    await this.newFreeTravelConfigBtn.click();
-    await this.configNameTextbox.fill(configurationName);
-    await this.durationTextbox.fill(duration.toString());
-    await this.freeSessionsTextbox.fill(freeSessions.toString());
-    await this.validFromTimePicker.pressSequentially("0100A", { delay: 100 });
-    await this.validToTimePicker.pressSequentially("1200P", { delay: 100 });
-    
-    const checkbox = holidayType === 'public' 
-      ? this.excludePublicHolidayCheckbox 
-      : this.excludeSchoolHolidayCheckbox;
-
-    if (!(await checkbox.isChecked())) {
-      await checkbox.check();
-    }
-    
-    await this.saveBtn.click();
+  async getDivByText(text: string) {
+    return this.element.divByText(text);
   }
-  //#endregion ================================
+
+  async getSpanByText(text: string) {
+    return this.element.spanByText(text);
+  }
+
+  async getComplexXPathLocator(xpath: string) {
+    return this.element.elementByXPath(xpath);
+  }
+
+  async getFileInputByLabel(label: string) {
+    return this.element.fileInputByLabel(label);
+  }
+
+  async getAlertContent() {
+    return this.element.alertContent;
+  }
+
+  async getSearchInput() {
+    return this.element.searchInput;
+  }
+
+  async getButtonBySpanText(text: string) {
+    return this.element.buttonBySpanText(text);
+  }
 }

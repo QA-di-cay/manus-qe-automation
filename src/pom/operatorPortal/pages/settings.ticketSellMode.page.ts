@@ -1,5 +1,7 @@
 import { Page, expect, Locator } from '@playwright/test';
 import { BasePage } from '@opePortalBasePage';
+import { GenericElement } from '@opePortalGeneEl';
+
 function escapeRegExp(s: string) {
   return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
@@ -7,13 +9,16 @@ const makeNameRegex = (keyword: string) =>
   new RegExp(`^\\s*${escapeRegExp(keyword)}\\s*$`, 'i');
 
 export class TicketSellModePage extends BasePage {
+  readonly element: GenericElement;
+  
   constructor(page: Page) {
     super(page, 'ticketSellModePage');
+    this.element = new GenericElement(page);
   }
 
   //#region ====== LOCATORS ===================
   private get saveBtn(): Locator {
-    return this.page.getByRole('button', { name: /^save$/i });
+    return this.element.buttonByText('Save');
   }
 
   private ratioBtn(btnText: string): Locator {

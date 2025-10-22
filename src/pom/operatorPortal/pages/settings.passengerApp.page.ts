@@ -1,40 +1,78 @@
-import { Page, expect, Locator } from '@playwright/test';
-import { BasePage } from '@opePortalBasePage';
+import { Page, Locator } from '@playwright/test';
+import { GenericElement } from '@opePortalGeneEl';
 
-export class PassengerAppPage extends BasePage {
-  constructor(page: Page) {
-    super(page, 'passengerAppPage');
+export class SettingsPassengerAppPage {
+  readonly element: GenericElement;
+  constructor(public readonly page: Page) {
+    this.element = new GenericElement(page);
   }
 
-  //#region ====== LOCATORS ===================
-  private get pageHeader(): Locator {
-    return this.page.locator('h1, h2, .page-title').filter({ hasText: /passenger.*app/i });
+  // Example locators to be replaced
+  get someButton(): Locator {
+    return this.element.buttonByText("Some Button");
   }
 
-  private get settingsContainer(): Locator {
-    return this.page.locator('.settings-container, .content-container, main');
+  get someInput(): Locator {
+    return this.element.inputByName("someInputName");
   }
 
-  private get configurationForm(): Locator {
-    return this.page.locator('form, .form-container');
+  get anotherInput(): Locator {
+    return this.element.inputByPlaceholder("Another Placeholder");
   }
-  //#endregion ================================
 
-  //#region ====== GUARDS =====================
-  protected async loadCondition(): Promise<void> {
-    await Promise.all([
-      expect(this.settingsContainer).toBeVisible(),
-    ]);
+  get labelInput(): Locator {
+    return this.element.inputByLabel("Label Text");
   }
-  //#endregion ================================
 
-  //#region ====== ACTIONS ====================
-  // Add specific actions for passenger app configuration when requirements are defined
-  //#endregion ================================
-
-  //#region ====== ASSERTS ====================
-  async verifyPageLoaded(): Promise<void> {
-    await expect(this.settingsContainer).toBeVisible();
+  get complexXPathElement(): Locator {
+    return this.element.elementByXPath("//div[@id=\"complex\"]/span[contains(.,\"text\")]");
   }
-  //#endregion ================================
+
+  get fileUploadInput(): Locator {
+    return this.element.fileInputByLabel("File Upload"); // Assuming a label 'File Upload' for this input
+  }
+
+  get alertContentDiv(): Locator {
+    return this.element.alertContent;
+  }
+
+  get searchInput(): Locator {
+    return this.element.searchInput;
+  }
+
+  get tableCellLocator(): Locator {
+    return this.element.tableCell(1, 1);
+  }
+
+  get tableRowByTextLocator(): Locator {
+    return this.element.tableRowByText("Row Text");
+  }
+
+  get linkByTextLocator(): Locator {
+    return this.element.linkByText("Link Text");
+  }
+
+  get divByTextLocator(): Locator {
+    return this.element.divByText("Div Text");
+  }
+
+  get spanByTextLocator(): Locator {
+    return this.element.spanByText("Span Text");
+  }
+
+  get buttonBySpanTextLocator(): Locator {
+    return this.element.buttonBySpanText("Button Span Text");
+  }
+
+  get dropdownByLabelLocator(): Locator {
+    return this.element.dropdownByLabel("Dropdown Label");
+  }
+
+  get dropdownOptionLocator(): Locator {
+    return this.element.dropdownOption("Option Text");
+  }
+
+  get dropdownOptionByClassLocator(): Locator {
+    return this.element.dropdownOptionByClass("Class Option Text");
+  }
 }

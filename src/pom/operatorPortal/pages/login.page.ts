@@ -12,17 +12,17 @@ export class LoginPage extends BasePage {
 
   //#region ====== LOCATORS ===================
   private get username(): Locator {
-    return this.element.inputField('username');
-  };
+    return this.element.inputByName('username');
+  }
+  
   private get password(): Locator {
-    return this.element.inputField('password');
-  };
+    return this.element.inputByName('password');
+  }
+  
   private get loginBtn(): Locator {
-    return this.element.inputBtn('Login');
-  };
+    return this.element.buttonByText('Login');
+  }
   //#endregion =================================
-
-
 
   //#region ====== GUARDS =====================
   protected async loadCondition(): Promise<void> {
@@ -38,7 +38,7 @@ export class LoginPage extends BasePage {
   async access(): Promise<void> {
     await this.page.goto('/');
     await this.expectLoaded();
-  };
+  }
 
   private async submitValidCredential({
     user,
@@ -61,7 +61,7 @@ export class LoginPage extends BasePage {
     const mfaPage = new MfaPage(this.page);
     await mfaPage.expectLoaded();
     return mfaPage;
-  };
+  }
 
   async loginSuccess({
     user,
@@ -81,6 +81,6 @@ export class LoginPage extends BasePage {
     });
     const adminCompanyPage = await mfaPage.submitValidOtp(mfaSecret, submitWithEnter);
     return adminCompanyPage;
-  };
+  }
   //#endregion =================================
 }

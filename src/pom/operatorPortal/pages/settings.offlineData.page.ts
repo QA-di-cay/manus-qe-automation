@@ -1,36 +1,23 @@
-import { Page, expect, Locator } from '@playwright/test';
-import { BasePage } from '@opePortalBasePage';
+import { Page, Locator } from "@playwright/test";
+import { GenericElement } from '@opePortalGeneEl';
 
-export class OfflineDataPage extends BasePage {
-  constructor(page: Page) {
-    super(page, 'offlineDataPage');
+export class SettingsOfflineDataPage {
+  readonly element: GenericElement;
+
+  constructor(private page: Page) {
+    this.element = new GenericElement(page);
   }
 
-  //#region ====== LOCATORS ===================
-  private get pageHeader(): Locator {
-    return this.page.locator('h1, h2, .page-title').filter({ hasText: /offline.*data/i });
-  }
-
-  private get settingsContainer(): Locator {
-    return this.page.locator('.settings-container, .content-container, main');
-  }
-  //#endregion ================================
-
-  //#region ====== GUARDS =====================
-  protected async loadCondition(): Promise<void> {
-    await Promise.all([
-      expect(this.settingsContainer).toBeVisible(),
-    ]);
-  }
-  //#endregion ================================
-
-  //#region ====== ACTIONS ====================
-  // Add specific actions for offline data management when requirements are defined
-  //#endregion ================================
-
-  //#region ====== ASSERTS ====================
-  async verifyPageLoaded(): Promise<void> {
-    await expect(this.settingsContainer).toBeVisible();
-  }
-  //#endregion ================================
+  // Example locators to be updated
+  readonly saveButton: Locator = this.element.buttonByText("Save");
+  readonly cancelButton: Locator = this.element.buttonBySpanText("Cancel");
+  readonly nameInput: Locator = this.element.inputByName("offlineDataName");
+  readonly descriptionInput: Locator = this.element.inputByPlaceholder("Enter description");
+  readonly statusDropdown: Locator = this.element.dropdownByLabel("Status");
+  readonly optionActive: Locator = this.element.dropdownOption("Active");
+  readonly firstTableCell: Locator = this.element.tableCell(1, 1);
+  readonly linkDetails: Locator = this.element.linkByText("Details");
+  readonly divMessage: Locator = this.element.divByText("Success Message");
+  readonly spanError: Locator = this.element.spanByText("Error Message");
+  readonly complexXPathElement: Locator = this.element.elementByXPath('//div[@id="someId"]/span[contains(text(), "Complex")]');
 }

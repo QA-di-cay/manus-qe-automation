@@ -1,30 +1,34 @@
 import { Page, expect, Locator } from '@playwright/test';
 import { BasePage } from '@opePortalBasePage';
+import { GenericElement } from '@opePortalGeneEl';
 
 export class PushToTalkPage extends BasePage {
+  readonly element: GenericElement;
+  
   constructor(page: Page) {
     super(page, 'pushToTalkPage');
+    this.element = new GenericElement(page);
   }
 
   //#region ====== LOCATORS ===================
   private get headerPushToTalk(): Locator {
-    return this.page.locator('span:has-text("Push to talk")');
+    return this.element.spanByText('Push to talk');
   }
 
   private get adminUsernameTextBox(): Locator {
-    return this.page.locator('label:has-text("Admin Username") + input');
+    return this.element.inputByLabel('Admin Username');
   }
 
   private get adminPasswordTextBox(): Locator {
-    return this.page.locator('label:has-text("Admin Password") + input');
+    return this.element.inputByLabel('Admin Password');
   }
 
   private get adminUsernameTextTip(): Locator {
-    return this.page.locator('label[class="v-label theme--light"]:has-text("Admin Username")');
+    return this.element.elementByXPath('//label[contains(@class,"v-label") and contains(@class,"theme--light") and contains(text(),"Admin Username")]');
   }
 
   private get adminPasswordTextTip(): Locator {
-    return this.page.locator('label[class="v-label theme--light"]:has-text("Admin Password")');
+    return this.element.elementByXPath('//label[contains(@class,"v-label") and contains(@class,"theme--light") and contains(text(),"Admin Password")]');
   }
   //#endregion ================================
 

@@ -1,57 +1,75 @@
 import { Page, expect, Locator } from '@playwright/test';
 import { BasePage } from '@opePortalBasePage';
+import { GenericElement } from '@opePortalGeneEl';
 import { isValidDDMMYYYY } from '@utils';
 
 export class HolidayPage extends BasePage {
+  readonly element: GenericElement;
+  
   constructor(page: Page) {
     super(page, 'holidayPage');
+    this.element = new GenericElement(page);
   }
 
   //#region ====== LOCATORS ===================
   private get addNewHolidayBtn(): Locator {
-    return this.page.locator('button span:has-text("Add New Holiday")');
+    return this.element.buttonBySpanText('Add New Holiday');
   }
+  
   private get headerCreateHolidayPopup(): Locator {
-    return this.page.locator('h2:has-text("Create holiday")');
+    return this.element.divByText('Create holiday');
   }
+  
   private get holidayDateTextBox(): Locator {
-    return this.page.locator('[placeholder="Select Holiday date"]');
+    return this.element.inputByPlaceholder('Select Holiday date');
   }
+  
   private get holidayTypeDropdown(): Locator {
-    return this.page.locator('label:has-text("Holiday type") + input ');
+    return this.element.dropdownByLabel('Holiday type');
   }
+  
   private get publicHolidayOption(): Locator {
-    return this.page.locator('div[class="v-list-item__title"]:has-text("Public Holiday")');
+    return this.element.dropdownOptionByClass('Public Holiday');
   }
+  
   private get schoolHolidayOption(): Locator {
-    return this.page.locator('div[class="v-list-item__title"]:has-text("School Holiday")');
+    return this.element.dropdownOptionByClass('School Holiday');
   }
+  
   private get saveBtnAddHolidayPopup(): Locator {
-    return this.page.locator('button:has-text("Save")');
+    return this.element.buttonByText('Save');
   }
+  
   private get firstDateValue(): Locator {
-    return this.page.locator('tbody tr:first-child td:first-child');
+    return this.element.tableCell(1, 1);
   }
+  
   private get firstTypeValue(): Locator {
-    return this.page.locator('tbody tr:first-child td:nth-child(2)');
+    return this.element.tableCell(1, 2);
   }
+  
   private get firstDeleteBtn(): Locator {
-    return this.page.locator('tbody tr:first-child td:nth-child(3) button[aria-label="delete holiday"]');
+    return this.element.elementByXPath('//tbody/tr[1]/td[3]//button[@aria-label="delete holiday"]');
   }
+  
   private get secondTypeValue(): Locator {
-    return this.page.locator('tbody tr:nth-child(2) td:nth-child(2)');
+    return this.element.tableCell(2, 2);
   }
+  
   private get secondDeleteBtn(): Locator {
-    return this.page.locator('tbody tr:nth-child(2) td:nth-child(3) button[aria-label="delete holiday"]');
+    return this.element.elementByXPath('//tbody/tr[2]/td[3]//button[@aria-label="delete holiday"]');
   }
+  
   private get searchTextBox(): Locator {
-    return this.page.locator('label:has-text("Search") + input');
+    return this.element.inputByLabel('Search');
   }
+  
   private get confirmDeleteHolidayBtn(): Locator {
-    return this.page.locator('div:has-text("Are you sure you want to delete this holiday?") + div button:has-text("OK")');
+    return this.element.elementByXPath('//div[contains(text(),"Are you sure you want to delete this holiday?")]/following-sibling::div//button[contains(text(),"OK")]');
   }
+  
   private get rows(): Locator {
-    return this.page.locator('tbody tr');
+    return this.element.elementByXPath('//tbody/tr');
   }
   //#endregion ================================
 
