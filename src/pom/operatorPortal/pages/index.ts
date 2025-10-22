@@ -7,7 +7,7 @@ export * from "./gpsTracking.liveTracking.page";
 export * from "./login.page";
 export * from "./loginMfa.page";
 export * from "./settings.dataIntegration.page";
-export * from "./data-integrations.page";
+
 export * from "./settings.driverApp.page";
 export * from "./settings.fatigueManagement.page";
 export * from "./settings.generalInfo.page";

@@ -1,10 +1,10 @@
 import { test } from '@fixtures';
-import { CompanyPage, DataIntegrationsPage } from '@opePortalPages';
+import { CompanyPage, DataIntegrationPage } from '@opePortalPages';
 import { IntegrationFormData } from '@opePortalTypes';
 import { integrationTestData, testCompany } from '@data/integration.data';
 
 test.describe('Data Integrations - @dataIntegrations @settings', () => {
-  let dataIntegrationsPage: DataIntegrationsPage;
+  let dataIntegrationsPage: DataIntegrationPage;
 
   test.beforeEach(async ({ sharedPage }) => {
     // Navigate to company page and access data integrations
@@ -15,7 +15,7 @@ test.describe('Data Integrations - @dataIntegrations @settings', () => {
     await gpsTrackingPage.header.accessDataIntegrationPage();
     
     // Initialize page object
-    dataIntegrationsPage = new DataIntegrationsPage(sharedPage);
+    dataIntegrationsPage = new DataIntegrationPage(sharedPage);
   });
 
   test('[TC-1649] Should create new data integration successfully', async () => {
@@ -67,14 +67,39 @@ test.describe('Data Integrations - @dataIntegrations @settings', () => {
     await dataIntegrationsPage.expectIntegrationExists(testData.name);
   });
 
+  test('[TC-1649-Legacy] Should create integration using legacy method', async () => {
+    const testData = integrationTestData.validIntegration;
+    
+    // Use legacy method for backward compatibility
+    await dataIntegrationsPage.createNewIntegration(
+      testData.name,
+      testData.url,
+      testData.authToken,
+      testData.areaCode,
+      testData.companyCode,
+      testData.apiVersion,
+      testData.appCode,
+      testData.type,
+      testData.smartcardField,
+      testData.studentStatuses,
+      testData.lastRunAt
+    );
+    
+    // Verify integration was created
+    await dataIntegrationsPage.searchIntegration(testData.name);
+    await dataIntegrationsPage.expectIntegrationExists(testData.name);
+  });
+
   test('[TC-1324] Should verify v-card design is not visible', async () => {
-    // Verify that v-card elements are not visible
+    // Verify that v-card elements are not visible (using both new and legacy methods)
     await dataIntegrationsPage.expectElementWithClassNotVisible('v-card');
+    await dataIntegrationsPage.assertEleWithClassNotVisible('v-card');
   });
 
   test('[TC-1323] Should have horizontal scrollbar on low width monitor', async () => {
-    // Verify horizontal scrollbar functionality
+    // Verify horizontal scrollbar functionality (using both new and legacy methods)
     await dataIntegrationsPage.expectHasHorizontalScrollbar();
+    await dataIntegrationsPage.assertHasHorizontalScrollbar();
   });
 
   test('Should verify form validation for required fields', async () => {
@@ -161,8 +186,9 @@ test.describe('Data Integrations - @dataIntegrations @settings', () => {
     // Ensure table has data
     await dataIntegrationsPage.expectTableHasData();
     
-    // Test horizontal scrolling
+    // Test horizontal scrolling (using both new and legacy methods)
     await dataIntegrationsPage.scrollTableHorizontally();
+    await dataIntegrationsPage.scrollHorizontally();
     
     // Verify scrollbar exists
     await dataIntegrationsPage.expectHasHorizontalScrollbar();
