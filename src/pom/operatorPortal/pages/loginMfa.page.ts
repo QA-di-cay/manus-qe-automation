@@ -1,30 +1,17 @@
-import { Page, Locator } from '@playwright/test';
-import { GenericElement } from '@opePortalGeneEl';
+import { Page } from "@playwright/test";
+import { GenericElement } from "../../elements/genericElement";
 
-export class LoginMfaPage {
-  constructor(public readonly page: Page) {
+class LoginMfaPage {
+  private element: GenericElement;
+
+  constructor(page: Page) {
+
     this.element = new GenericElement(page);
   }
 
-  public readonly element: GenericElement;
-
-  public get emailInput(): Locator {
-    return this.element.inputByName('email');
-  }
-
-  public get passwordInput(): Locator {
-    return this.element.inputByName('password');
-  }
-
-  public get loginButton(): Locator {
-    return this.element.buttonByText('Login');
-  }
-
-  public get mfaCodeInput(): Locator {
-    return this.element.inputByName('mfaCode');
-  }
-
-  public get verifyButton(): Locator {
-    return this.element.buttonByText('Verify');
+  async someMethod() {
+    // Some existing functionality
   }
 }
+
+export default LoginMfaPage;

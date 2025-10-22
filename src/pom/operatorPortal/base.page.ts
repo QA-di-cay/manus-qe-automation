@@ -1,25 +1,37 @@
-import { Page } from '@playwright/test';
+import { Page, expect } from '@playwright/test';
+import { Header } from '@opePortalComp';
+import { Routes } from '@opePortalRoutes';
 import { GenericElement } from '@opePortalGeneEl';
 
-export class BasePage {
-  protected readonly page: Page;
-  public readonly element: GenericElement;
+export abstract class BasePage {
+  readonly header: Header;
+  readonly element: GenericElement;
 
-  constructor(page: Page) {
-    this.page = page;
+  protected constructor(
+    protected readonly page: Page,
+    protected readonly routeKey: keyof typeof Routes
+  ) {
+    this.header = new Header(page);
     this.element = new GenericElement(page);
   }
 
-  // Example locators to be replaced
-  async getButtonByText(text: string) {
-    return this.element.buttonByText(text);
-  }
+  //#region ====== Generic Actions ============
+  protected abstract loadCondition(): Promise<void>;
 
-  async getInputByName(name: string) {
-    return this.element.inputByName(name);
+  async expectLoaded(): Promise<void> {
+    const { path, title } = Routes[this.routeKey];
+    const regex = new RegExp(
+      path.replace('/transportme', '/transportme(?:/index\\.php)?') + '(?:[?#].*)?$'
+    );
+    await expect(this.page).toHaveURL(regex);
+    // await expect(this.page.getByRole('heading', { name: title })).toBeVisible(),
+    await this.loadCondition();
   }
-
-  async getDivByText(text: string) {
-    return this.element.divByText(text);
+  
+  async reloadIdle(): Promise<void> {
+    await this.page.waitForTimeout(1000);
+    await this.page.reload();
+    await this.page.waitForLoadState('networkidle');
   }
+  //#endregion ================================
 }

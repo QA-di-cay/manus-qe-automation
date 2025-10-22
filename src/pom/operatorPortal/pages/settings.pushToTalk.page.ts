@@ -3,11 +3,8 @@ import { BasePage } from '@opePortalBasePage';
 import { GenericElement } from '@opePortalGeneEl';
 
 export class PushToTalkPage extends BasePage {
-  readonly element: GenericElement;
-  
   constructor(page: Page) {
     super(page, 'pushToTalkPage');
-    this.element = new GenericElement(page);
   }
 
   //#region ====== LOCATORS ===================

@@ -4,11 +4,8 @@ import { GenericElement } from '@opePortalGeneEl';
 import { IntegrationFormData } from '@opePortalTypes';
 
 export class DataIntegrationPage extends BasePage {
-  readonly element: GenericElement;
-  
   constructor(page: Page) {
-    super(page, 'dataIntegrationPage');
-    this.element = new GenericElement(page);
+    super(page, 'dataIntegrationsPage');
   }
 
   //#region ====== LOCATORS ===================
