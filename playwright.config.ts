@@ -19,7 +19,7 @@ export default defineConfig({
   fullyParallel: true,
 
   // Number of parallel workers (default = CPU cores if not set)
-  workers: 2, 
+  workers: 1, 
 
   // Reporters: show line output, HTML report, and list format
   reporter: [
@@ -33,7 +33,7 @@ export default defineConfig({
     baseURL: process.env.BASE_URL,      // global base URL
     screenshot: 'only-on-failure',      // take screenshots only if test fails
     video: 'retain-on-failure',         // keep video only for failed tests
-    // trace: 'on-first-retry',         // capture trace if test fails and retries
+    trace: 'on-first-retry',         // capture trace if test fails and retries
     actionTimeout: 15_000,              // timeout for single UI action (15s)
     navigationTimeout: 20_000,          // timeout for navigation/loadState (20s)
     viewport: { width: 1920, height: 1080 } // default browser window size

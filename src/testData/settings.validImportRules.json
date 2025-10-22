@@ -1,0 +1,161 @@
+{
+  "rulesetName": "Automation test",
+  "rulesetEffectiveDate": "2025-01-01",
+  "rulesetExpiryDate": null,
+  "rulesetVersionNumber": "1.0.3",
+  "rules": [
+    {
+      "period": { "days": 0, "hours": 7, "minutes": 0, "inclusive": "true" },
+      "isLongNightWork": false,
+      "startingPoint": { "days": 0, "hours": 0, "minutes": 0, "inclusive": "true" },
+      "maximumWork": { "days": 0, "hours": 5, "minutes": 30, "inclusive": "true" },
+
+      "maximumWorkBreach": {
+        "noBreach": { "days": 0, "hours": 5, "minutes": 30, "inclusive": "true" },
+        "minorBreach": {
+          "from": { "days": 0, "hours": 5, "minutes": 30, "inclusive": "false" },
+          "to":   { "days": 0, "hours": 6, "minutes": 0,  "inclusive": "false" }
+        },
+        "substantialBreach": {
+          "from": { "days": 0, "hours": 6, "minutes": 0,  "inclusive": "false" },
+          "to":   { "days": 0, "hours": 6, "minutes": 30, "inclusive": "false" }
+        },
+        "severeBreach": {
+          "from": { "days": 0, "hours": 6, "minutes": 30, "inclusive": "false" },
+          "to":   { "days": 0, "hours": 7, "minutes": 0,  "inclusive": "false" }
+        },
+        "criticalBreach": {
+          "from": { "days": 0, "hours": 7, "minutes": 0,  "inclusive": "false" },
+          "to":   { "days": 0, "hours": 24, "minutes": 0, "inclusive": "false" }
+        }
+      },
+
+      "break": [
+        {
+          "consecutiveNightBreaks": 0,
+          "nightBreaks": 0,
+
+          "restBreak": {
+            "minimumTime":       { "days": 0, "hours": 0, "minutes": 30, "inclusive": "true" },
+            "continuousBreak":   { "days": 0, "hours": 0, "minutes": 15, "inclusive": "true" },
+            "numberOfContinuousBreaks": 2,
+
+            "stationary": false,
+            "sleeperBerthWhileMoving": false,
+            "descriptionContainsAtLeast": false,
+            "continuousBreaksMustBeStationary": false,
+            "minimumTimeMustBeStationary": false
+          },
+
+          "timeLimit": { "days": 0, "hours": 7, "minutes": 0, "inclusive": "true" },
+
+          "breachList": {
+            "minorBreach": [
+              {
+                "continuousStationaryBreakBreach": {
+                  "from": { "days": 0, "hours": 0, "minutes": 10, "inclusive": "false" },
+                  "to":   { "days": 0, "hours": 0, "minutes": 14, "inclusive": "false" }
+                },
+                "perBlock": false,
+                "restBreakBreach": {
+                  "restBreakInterval": {
+                    "from": { "days": 0, "hours": 0, "minutes": 20, "inclusive": "false" },
+                    "to":   { "days": 0, "hours": 0, "minutes": 29, "inclusive": "false" }
+                  },
+                  "continuousBreak": {
+                    "to": { "days": 0, "hours": 0, "minutes": 14, "inclusive": "false" }
+                  }
+                },
+                "continuousBreakBreach": {
+                  "from": { "days": 0, "hours": 0, "minutes": 10, "inclusive": "false" },
+                  "to":   { "days": 0, "hours": 0, "minutes": 14, "inclusive": "false" }
+                },
+                "continuousBreakIsStationary": false
+              }
+            ],
+            "substantialBreach": [
+              {
+                "continuousStationaryBreakBreach": {
+                  "from": { "days": 0, "hours": 0, "minutes": 5,  "inclusive": "false" },
+                  "to":   { "days": 0, "hours": 0, "minutes": 9,  "inclusive": "false" }
+                },
+                "perBlock": false,
+                "restBreakBreach": {
+                  "restBreakInterval": {
+                    "from": { "days": 0, "hours": 0, "minutes": 10, "inclusive": "false" },
+                    "to":   { "days": 0, "hours": 0, "minutes": 19, "inclusive": "false" }
+                  },
+                  "continuousBreak": {
+                    "to": { "days": 0, "hours": 0, "minutes": 9, "inclusive": "false" }
+                  }
+                },
+                "continuousBreakBreach": {
+                  "from": { "days": 0, "hours": 0, "minutes": 5, "inclusive": "false" },
+                  "to":   { "days": 0, "hours": 0, "minutes": 9, "inclusive": "false" }
+                },
+                "continuousBreakIsStationary": false
+              }
+            ],
+            "severeBreach": [],
+            "criticalBreach": []
+          }
+        }
+      ]
+    },
+
+    {
+      "period": { "days": 1, "hours": 0, "minutes": 0, "inclusive": "true" },
+      "isLongNightWork": true,
+      "startingPoint": { "days": 0, "hours": 0, "minutes": 0, "inclusive": "true" },
+      "maximumWork": { "days": 0, "hours": 12, "minutes": 0, "inclusive": "true" },
+
+      "maximumWorkBreach": {
+        "noBreach": { "days": 0, "hours": 12, "minutes": 0, "inclusive": "true" },
+        "minorBreach": {
+          "from": { "days": 0, "hours": 12, "minutes": 0, "inclusive": "false" },
+          "to":   { "days": 0, "hours": 13, "minutes": 0, "inclusive": "false" }
+        },
+        "substantialBreach": {
+          "from": { "days": 0, "hours": 13, "minutes": 0, "inclusive": "false" },
+          "to":   { "days": 0, "hours": 14, "minutes": 0, "inclusive": "false" }
+        },
+        "severeBreach": {
+          "from": { "days": 0, "hours": 14, "minutes": 0, "inclusive": "false" },
+          "to":   { "days": 0, "hours": 16, "minutes": 0, "inclusive": "false" }
+        },
+        "criticalBreach": {
+          "from": { "days": 0, "hours": 16, "minutes": 0, "inclusive": "false" },
+          "to":   { "days": 1, "hours": 0,  "minutes": 0, "inclusive": "false" }
+        }
+      },
+
+      "break": [
+        {
+          "consecutiveNightBreaks": 2,
+          "nightBreaks": 2,
+
+          "restBreak": {
+            "minimumTime":     { "days": 0, "hours": 1, "minutes": 0,  "inclusive": "true" },
+            "continuousBreak": { "days": 0, "hours": 0, "minutes": 30, "inclusive": "true" },
+            "numberOfContinuousBreaks": 2,
+
+            "stationary": true,
+            "sleeperBerthWhileMoving": false,
+            "descriptionContainsAtLeast": false,
+            "continuousBreaksMustBeStationary": true,
+            "minimumTimeMustBeStationary": true
+          },
+
+          "timeLimit": { "days": 1, "hours": 0, "minutes": 0, "inclusive": "true" },
+
+          "breachList": {
+            "minorBreach": [],
+            "substantialBreach": [],
+            "severeBreach": [],
+            "criticalBreach": []
+          }
+        }
+      ]
+    }
+  ]
+}

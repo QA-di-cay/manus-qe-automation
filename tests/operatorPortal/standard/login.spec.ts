@@ -9,6 +9,10 @@ test.describe('Operator Portal login success - @login', () => {
   test('Login success', async ({ page }) => {
     const loginPage = new LoginPage(page);
     await loginPage.access();
-    await loginPage.loginSuccess(username, password, mfaSecret);
+    await loginPage.loginSuccess({
+      user: username,
+      pass: password,
+      mfaSecret: mfaSecret,
+    });
   })
 })

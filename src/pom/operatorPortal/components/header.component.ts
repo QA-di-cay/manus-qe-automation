@@ -20,6 +20,9 @@ const subMenuMap: Record<string, string> = {
   'ptb report': 'settings',
   'ticket sell mode': 'settings',
   'data integrations': 'settings',
+  'driver app': 'settings',
+  'passenger app': 'settings',
+  'fatigue managemen': 'settings',
 
   // Smartcards
   'travel configuration': 'smartcards',
@@ -75,10 +78,11 @@ export class Header {
   //#region ====== INTERNAL HELPERS ===========
   private async hoverMenu(menuText: string): Promise<void> {
     await this.expectLoaded();
+    await this.menuItem(menuText).waitFor({ state: 'visible', timeout: 3000 });
     await this.menuItem(menuText).hover();
-    await this.subMenuWrapper(menuText).waitFor({ state: 'visible', timeout: 1500 }),
-      await expect(this.subMenuWrapper(menuText)).toBeVisible();
-  }
+    await this.subMenuWrapper(menuText).waitFor({ state: 'visible', timeout: 3000 });
+    await expect(this.subMenuWrapper(menuText)).toBeVisible();
+  };
 
   private getMenuText(subMenuText: string): string {
     const key = normalize(subMenuText);
@@ -90,6 +94,20 @@ export class Header {
       );
     }
     return parent;
+  };
+
+  async clickSubMenu<TargetPage extends { expectLoaded: () => Promise<void> }>(
+    subMenuText: string,
+    pageObject: new (page: Page) => TargetPage
+  ): Promise<TargetPage> {
+    const menuText = this.getMenuText(subMenuText);
+    await this.hoverMenu(menuText);
+    await this.subMenuItem(subMenuText).waitFor({ state: 'visible', timeout: 3000 });
+    await this.subMenuItem(subMenuText).click();
+
+    const targetPage = new pageObject(this.page);
+    await targetPage.expectLoaded();
+    return targetPage;
   }
 
   private async getSettingsItemsWithIcons(parentMenuText: string): Promise<IconInfo[]> {
@@ -104,6 +122,7 @@ export class Header {
       const menuText = ((await anchor.innerText()) || '').trim();
 
       const iconEl = this.iconSubMenus(anchor);
+      await iconEl.waitFor({ state: 'visible', timeout: 3000 });
       await expect(iconEl, `Icon must exist for "${menuText}"`).toBeVisible();
 
       const data = await iconEl.evaluate((el) => {
@@ -139,26 +158,13 @@ export class Header {
 
     return results;
   }
-
-  async clickSubMenu<TargetPage extends { expectLoaded: () => Promise<void> }>(
-    subMenuText: string,
-    pageObject: new (page: Page) => TargetPage
-  ): Promise<TargetPage> {
-    const menuText = this.getMenuText(subMenuText);
-    await this.hoverMenu(menuText);
-    await this.subMenuItem(subMenuText).waitFor({ state: 'visible', timeout: 1500 }),
-      await expect(this.subMenuItem(subMenuText)).toBeVisible();
-    await this.subMenuItem(subMenuText).click();
-
-    const targetPage = new pageObject(this.page);
-    await targetPage.expectLoaded();
-    return targetPage;
-  }
   //#endregion ================================
 
 
   //#region ====== GUARDS =====================
   async expectLoaded(): Promise<void> {
+    await this.headerMenu.waitFor({ state: 'visible' });
+    await this.headerMenu.waitFor({ state: 'visible', timeout: 3000 });
     await expect(this.headerMenu).toBeVisible();
   }
   //#endregion ================================
@@ -180,20 +186,23 @@ export class Header {
   async accessTravelConfiguration(): Promise<accessTo.TravelConfigPage> {
     return this.clickSubMenu('Travel Configuration', accessTo.TravelConfigPage);
   }
-  async accessPtbReportPage(): Promise<accessTo.PtbReportPage> {
-    return this.clickSubMenu('PTB Report', accessTo.PtbReportPage);
-  }
+  // async accessPtbReportPage(): Promise<accessTo.PtbReportPage> {
+  //   return this.clickSubMenu('PTB Report', accessTo.PtbReportPage);
+  // }
   async accessTicketSellModePage(): Promise<accessTo.TicketSellModePage> {
     return this.clickSubMenu('Ticket Sell Mode', accessTo.TicketSellModePage);
   }
   async accessDriverAppPage(): Promise<accessTo.DriverAppPage> {
-    return this.clickSubMenu('Ticket Sell Mode', accessTo.DriverAppPage);
+    return this.clickSubMenu('Driver App', accessTo.DriverAppPage);
   }
   async accessDataIntegrationPage(): Promise<accessTo.DataIntegrationPage> {
     return this.clickSubMenu('Data Integrations', accessTo.DataIntegrationPage);
   }
   async accessGeofenceRangePage(): Promise<accessTo.GeofenceRangePage> {
     return this.clickSubMenu('Geofence Range', accessTo.GeofenceRangePage);
+  }
+  async accessFatigueManagementPage(): Promise<accessTo.FatigueManagementPage> {
+    return this.clickSubMenu('Fatigue Management', accessTo.FatigueManagementPage);
   }
   //#endregion ================================
 

@@ -12,7 +12,7 @@ type WorkerFixtures = {
 export const test = base.extend<TestFixtures, WorkerFixtures>({
   // Worker-scoped
   sharedContext: [async ({ browser }, use) => {
-    const baseURL = process.env.BASE_URL;    
+    const baseURL = process.env.BASE_URL;
     const context = await browser.newContext({
       baseURL: baseURL
     });
@@ -20,11 +20,11 @@ export const test = base.extend<TestFixtures, WorkerFixtures>({
     const loginPage = new LoginPage(page);
     try {
       await loginPage.access();
-      await loginPage.loginSuccess(
-        process.env.ADMIN_USERNAME!,
-        process.env.ADMIN_PASSWORD!,
-        process.env.ADMIN_MFA_SECRET!
-      );
+      await loginPage.loginSuccess({
+        user: process.env.ADMIN_USERNAME!,
+        pass: process.env.ADMIN_PASSWORD!,
+        mfaSecret: process.env.ADMIN_MFA_SECRET!,
+      });
     } catch (error) {
       console.error('Shared authentication failed:', error);
       throw error;

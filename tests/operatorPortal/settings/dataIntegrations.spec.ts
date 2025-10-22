@@ -29,4 +29,15 @@ test.describe('Data Integration testcases - @dataIntegrations @settings', () => 
       ''
     );
   });
+
+  // this test is failed due to visible v-card element
+  test('[TC-1324] Data Integrations: Verify that v-card design is no longer visible and all the contents display correctly', async ({ sharedPage }) => {
+    const dataItgPage = new DataIntegrationPage(sharedPage);
+    await dataItgPage.assertEleWithClassNotVisible('v-card');
+  });
+
+  test('[TC-1323] Data Integrations: Verify that on low width monitor, there is a horizontal scrollbar so user can able to see all the contents', async ({ sharedPage }) => {
+    const dataItgPage = new DataIntegrationPage(sharedPage);
+    await dataItgPage.assertHasHorizontalScrollbar();
+  });
 });

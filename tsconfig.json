@@ -16,16 +16,16 @@
     "paths": {
       "@opePortalBasePage": ["src/pom/operatorPortal/base.page.ts"],
       "@opePortalPage/*":   ["src/pom/operatorPortal/pages/*"],
-      "@opePortalCom/*":    ["src/pom/operatorPortal/components/*"],
+      "@opePortalComp":     ["src/pom/operatorPortal/components"],
       "@opePortalRoutes":   ["src/pom/operatorPortal/routes"],
       "@opePortalPages":    ["src/pom/operatorPortal/pages/index"],
-      "@headerComponent":   ["src/pom/operatorPortal/components/header.component"],
+      "@opePortalTypes":    ["src/pom/operatorPortal/types.ts"],
       "@routes":            ["src/pom/operatorPortal/routes"],
       "@fixtures":          ["src/setup/fixtures"],
       "@data/*":            ["src/data/*"],
       "@globalSetup":       ["src/setup/globalSetup"],
       "@utils":             ["src/utils"],
-      "@testData/*":        ["src/testData"],
+      "@opePortalGeneEl":   ["src/pom/operatorPortal/generic.element.ts"],
     }
   },
   "include": [

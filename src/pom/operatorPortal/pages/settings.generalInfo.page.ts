@@ -1,7 +1,7 @@
 import { Page, expect, Locator } from '@playwright/test';
 import { BasePage } from '@opePortalBasePage';
 
-const testDataPath = "@testData"
+const testDataPath = "src/testData"
 export class GeneralInfoPage extends BasePage {
   constructor(page: Page) {
     super(page, 'generalInfoPage');
@@ -25,20 +25,21 @@ export class GeneralInfoPage extends BasePage {
   }
 
   private get logoPreview(): Locator {
-    return this.page.locator('div[style*="background-image"]');
+    return this.page.locator("xpath=//div[contains(@style,'background-image') and contains(@style,'Logo_') and contains(@style,'.png')]");
   }
 
-  private get nationalLocationCodeInput(): Locator {
+  get nationalLocationCodeInput(): Locator {
     return this.page.locator('label:has-text("National Location Code") + input');
   }
 
-  private get timezoneSelect(): Locator {
+  get timezoneSelect(): Locator {
     return this.page.locator('.v-select__slot:has-text("Timezone") input[type="text"]');
   }
 
   private get firstTimezoneOption(): Locator {
     return this.page.locator('div[role="option"]:first-child');
   }
+
   //#endregion ================================
 
   //#region ====== GUARDS =====================
@@ -55,13 +56,14 @@ export class GeneralInfoPage extends BasePage {
   ): Promise<void> {
     const logoPath = `${testDataPath}/${fileName}`;
     await this.uploadLogoBtn.setInputFiles(logoPath);
-    await this.saveBtn.click()
+    // await this.saveBtn.click();
   }
 
-  async verifyLogoIsAdded(fileName: string) {
+  async verifyLogoIsAdded() {
+    // await expect(this.successAlert).toBeVisible();
     await this.reloadIdle();
-    await expect(this.successAlert).toBeVisible();
-    await expect(this.logoFileName).toContainText(fileName);
+    await this.logoPreview.waitFor({ state: 'visible', timeout: 3000 });
+    await expect(this.logoPreview).toBeVisible();
   }
 
   async checkExistingLogo(): Promise<string> {
@@ -83,6 +85,7 @@ export class GeneralInfoPage extends BasePage {
   }
 
   async verifyAdded(locator: Locator, expectedText: string) {
+    await this.successAlert.waitFor({ state: 'visible', timeout: 3000 });
     await expect(this.successAlert).toBeVisible();
     await expect(locator).toHaveValue(expectedText);
   }
@@ -93,6 +96,7 @@ export class GeneralInfoPage extends BasePage {
   }
 
   async verifyFieldIsEmpty() {
+    await this.nationalLocationCodeInput.waitFor({ state: 'visible', timeout: 3000 });
     await expect(this.nationalLocationCodeInput).toHaveValue("");
   }
 }

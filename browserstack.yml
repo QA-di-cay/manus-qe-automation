@@ -1,14 +1,7 @@
-userName: ${BROWSERSTACK_USERNAME}
-accessKey: ${BROWSERSTACK_ACCESS_KEY}
-
-projectName: TME Test Run 
-buildName: TME Automation Test Run 
-buildIdentifier: '#${BUILD_NUMBER}'
-
-browserstackLocal: true
-
-debug: false 
-networkLogs: false 
-consoleLogs: errors 
-
-testReporting: true
+userName: hiepdo_fRPyXh
+accessKey: oxz4QfUz3vsKs2x9Msry
+projectName: BrowserStack Samples 
+buildName: Automation Test 
+buildIdentifier: '#${BUILD_NUMBER} [${DATE_TIME}]'
+testObservability: true
+browserstackAutomation: false

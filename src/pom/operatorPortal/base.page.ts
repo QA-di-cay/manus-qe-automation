@@ -1,5 +1,5 @@
 import { Page, expect } from '@playwright/test';
-import { Header } from '@headerComponent';
+import { Header } from '@opePortalComp';
 import { Routes } from '@opePortalRoutes';
 
 export abstract class BasePage {

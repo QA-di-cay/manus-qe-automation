@@ -1,23 +1,30 @@
 import { Page, expect, Locator } from '@playwright/test';
-import {BasePage} from '@opePortalBasePage';
+import { BasePage } from '@opePortalBasePage';
 import { LiveTrackingPage } from '@opePortalPages';
+import { GenericElement } from '@opePortalGeneEl';
 
 export class CompanyPage extends BasePage {
+  readonly element: GenericElement;
   constructor(page: Page) {
     super(page, 'companyPage');
+    this.element = new GenericElement(page);
   }
-
 
   //#region ====== LOCATORS ===================
-  private get addNewCompanyBtn(): Locator {
-    return this.page.locator('button[aria-label="Add New Company"]');
+  private get newCompanyBtn(): Locator {
+    return this.element.divBtn('Add New Company');
   }
-  private get searchTextBox(): Locator {
-    return this.page.locator("xpath=//*[contains(text(), 'Search')]/following-sibling::input");
+  private get searchInput(): Locator {
+    return this.element.inputBox('Search');
   }
-  private company(name: string): Locator {
-    return this.page.getByText(name, { exact: true });
-  }
+  private selectedCompany(
+    name: string
+  ): Locator {
+    return this.element.searchResult({
+      text: name,
+      colIndex: 1,
+    });
+  };
   //#endregion ================================
 
 
@@ -25,8 +32,8 @@ export class CompanyPage extends BasePage {
   //#region ====== GUARDS =====================
   protected async loadCondition(): Promise<void> {
     await Promise.all([
-      expect(this.addNewCompanyBtn).toBeVisible(),
-      expect(this.searchTextBox).toBeVisible(),
+      expect(this.newCompanyBtn).toBeVisible(),
+      expect(this.searchInput).toBeVisible(),
     ]);
   }
   //#endregion ================================
@@ -35,8 +42,6 @@ export class CompanyPage extends BasePage {
 
   //#region ====== ACTIONS ====================
   async navTo() {
-    // With shared authentication, page should already be on company page
-    // Just verify we're loaded correctly
     if (!this.page.url().includes('/company')) {
       await this.page.goto('/transportme/index.php/company');
     }
@@ -45,8 +50,9 @@ export class CompanyPage extends BasePage {
   async searchAndAccessCompany(
     name: string
   ): Promise<LiveTrackingPage> {
-    await this.searchTextBox.fill(name);
-    const targetCompany = this.company(name);
+    await this.searchInput.fill(name);
+    const targetCompany = this.selectedCompany(name);
+    await targetCompany.waitFor({state: 'visible'});
     await targetCompany.click()
 
     const liveTrackingPage = new LiveTrackingPage(this.page);

@@ -1,92 +1,93 @@
-import { expect, Locator, Page } from '@playwright/test';
-import { BasePage } from '@opePortalBasePage';
+import { Page, expect, Locator } from "@playwright/test";
 
-export class GeofenceRangePage extends BasePage {
-  constructor(page: Page) {
-    super(page, 'geofenceRangePage');
-  };
+export class GeofenceRangePage {
+    readonly geofenceForChangingInput: Locator;
+    readonly geofenceForAlertingInput: Locator;
+    readonly saveBtn: Locator;
+    readonly successAlert: Locator;
 
-  //#region ====== LOCATORS ===================
-  private iptField(
-    iptFieldText: 
-      'Geofence range for changing stop (meter)' |
-      'Geofence range for alerting message (meter)'
-    ): Locator {
-    return this.page.locator(`xpath=//label[contains(text(),'${iptFieldText}')]/following-sibling::input`);
-  };
-//label[contains(text(),'Geofence range for changing stop (meter)')]/following-sibling::input/ancestor::div[contains(@class,'row')]//div[@role='alert']//div[contains(text(),'is required')]
-  private get saveBtn(): Locator {
-    return this.page.locator("xpath=//span[contains(text(),'Save')]//parent::button");
-  };
+    constructor(private readonly page: Page) {
+        this.geofenceForChangingInput = page.locator('label:has-text("Geofence range for changing stop") + input');
+        this.geofenceForAlertingInput = page.locator('label:has-text("Geofence range for alerting message") + input');
+        this.saveBtn = page.locator('button:has-text("Save")');
+        this.successAlert = page.getByText("Geofence Range Updated");
 
-  private alert(inputField: Locator, alertTxt: string): Locator {
-    return inputField.locator(`xpath=/ancestor::div[contains(@class,'row')]//div[@role='alert']//div[contains(text(),'${alertTxt}')]`);
-  }
-  //#endregion ================================
+    }
 
-  //#region ====== GUARDS =====================
-  protected async loadCondition(): Promise<void> {
-    await Promise.all([
-      expect(this.iptField('Geofence range for changing stop (meter)')).toBeVisible(),
-      expect(this.iptField('Geofence range for alerting message (meter)')).toBeVisible(),
-      expect(this.saveBtn).toBeVisible(),
-    ]);
-  }
-  //#endregion ================================
+    async expectLoaded() {
+        await Promise.all([
+            expect(this.page).toHaveURL(/\/geofence/i),
+            expect(this.geofenceForChangingInput).toBeVisible(),
+            expect(this.geofenceForAlertingInput).toBeVisible(),
+        ]);
+    }
 
-  //#region ====== ACTIONS ====================
-  private async clickOutside(element: Locator, p = this.page): Promise<void>  {
-    const box = await element.boundingBox();
-    if (!box) return;
-    await p.mouse.click(box.x, box.y + 5);
-  }
+    async addgeofenceRange(value: string) {
+        await this.geofenceForChangingInput.fill(value);
+        await this.geofenceForAlertingInput.fill(value);
+        await this.saveBtn.click();
+    }
 
-  async clickSaveBtn(): Promise<void>  {
-    await this.saveBtn.click();
-  }
+    async verifyAddedSuccess() {
+        await expect(this.successAlert).toBeVisible();
+    }
 
+    async verifyAddedValue(locator: Locator, value: string) {
+        await expect(locator).toHaveValue(value);
+    }
 
-  async fillEmptyValue(
-    iptFieldText: 
-      'Geofence range for changing stop (meter)' |
-      'Geofence range for alerting message (meter)'
-  ): Promise<void> {
-    const inputField = this.iptField(iptFieldText);
-    await inputField.fill('');
-    await this.clickOutside(inputField);
-  }
+    async assertValidationError(type: 'changingStop' | 'alertingMessage') {
+        let expectedError;
+        let errorLocator;
 
-  async fillValue(
-    iptFieldText: 
-      'Geofence range for changing stop (meter)' |
-      'Geofence range for alerting message (meter)',
-    value: string
-  ): Promise<void> {
-    const inputField = this.iptField(iptFieldText);
-    await inputField.fill('');
-    await this.page.keyboard.type(value);
-    await this.clickOutside(inputField);
-  }
-  //#endregion ================================
+        if (type === 'changingStop') {
+            expectedError = 'Geofence range for changing stop cannot be less than 0.';
+            errorLocator = this.page.locator('.v-messages__message:has-text("changing stop")');
+        } else {
+            expectedError = 'Geofence range for alerting message cannot be less than 0.';
+            errorLocator = this.page.locator('.v-messages__message:has-text("alerting message")');
+        }
 
-  //#region ====== ASSERTS ====================
-  async assertRequiredIpt(
-    iptFieldText: 
-      'Geofence range for changing stop (meter)' |
-      'Geofence range for alerting message (meter)'
-  ): Promise<void> {
-    const alert = this.alert(this.iptField(iptFieldText),'is required');
-    await alert.waitFor({ state: 'visible' });
-    await expect(alert).toBeVisible();
-  }
-  async assertIptLessThan0(
-    iptFieldText: 
-      'Geofence range for changing stop (meter)' |
-      'Geofence range for alerting message (meter)'
-  ): Promise<void> {
-    const alert = this.alert(this.iptField(iptFieldText), 'cannot be less than 0');
-    await alert.waitFor({ state: 'visible' });
-    await expect(alert).toBeVisible();
-  }
-  //#endregion ================================
+        await expect(errorLocator).toHaveText(expectedError);
+    }
+
+    async typeLettersIntoInput(type: 'changingStop' | 'alertingMessage', letters: string) {
+        const input = type === 'changingStop' ? this.geofenceForChangingInput : this.geofenceForAlertingInput;
+        const mod = process.platform === 'darwin' ? 'Meta' : 'Control';
+
+        await input.click();
+        await this.page.keyboard.press(`${mod}+A`);
+        await this.page.keyboard.type(letters);
+    }
+
+    async assertInputEmpty(type: 'changingStop' | 'alertingMessage') {
+        const input = type === 'changingStop' ? this.geofenceForChangingInput : this.geofenceForAlertingInput;
+        await expect(input).toHaveValue('');
+    }
+
+    async readValue(type: 'changingStop' | 'alertingMessage'): Promise<string> {
+        const input = type === 'changingStop' ? this.geofenceForChangingInput : this.geofenceForAlertingInput;
+        return input.inputValue();
+    }
+
+    async assertEmptyError(type: 'changingStop' | 'alertingMessage') {
+        let expectedError;
+        let errorLocator;
+
+        if (type === 'changingStop') {
+            expectedError = 'Geofence range for changing stop is required.';
+            errorLocator = this.page.locator('.v-messages__message:has-text("changing stop")');
+        } else {
+            expectedError = 'Geofence range for alerting message is required.';
+            errorLocator = this.page.locator('.v-messages__message:has-text("alerting message")');
+        }
+
+        await expect(errorLocator).toHaveText(expectedError);
+    }
+
+    async saveWithoutValue() {
+        await this.geofenceForChangingInput.clear();
+        await this.geofenceForAlertingInput.clear();
+        await this.saveBtn.click();
+    }
 }

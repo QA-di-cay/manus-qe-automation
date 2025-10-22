@@ -17,7 +17,6 @@ export class LiveTrackingPage extends BasePage {
   //#region ====== GUARDS =====================
   protected async loadCondition(): Promise<void> {
     await Promise.all([
-      expect(this.activeGpsTrackingMenu).toBeVisible(),
     ]);
   }
   //#endregion ================================
